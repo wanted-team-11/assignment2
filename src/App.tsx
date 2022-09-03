@@ -1,10 +1,13 @@
 import Test from "./Test";
+import GNB from "./components/GNB";
+import Footer from "./components/Footer";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <GNB />
         <Routes>
           <Route path="/" element={<Navigate to="/fruitstore" />} />
           <Route path="/fruitstore/:id" element={<Test />} />
@@ -17,6 +20,7 @@ function App() {
             <Route path="product-list" element={<Test />} />
           </Route>
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );
