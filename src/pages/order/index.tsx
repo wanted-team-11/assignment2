@@ -6,10 +6,12 @@ import { Product } from "./types";
 import WhiteContainer from "./components/OrderWhiteContainer";
 import ProductContainer from "./components/OrderProductContainer";
 import DeliveryPriceContainer from "./components/OrderDeliveryPriceContainer";
-import OrderDeliveryContainer from "./components/OrderDeliveryContainer";
+import OrderDeliveryInfo from "./components/OrderDeliveryInfo";
+import OrderOrdererInfo from "./components/OrderOrdererInfo";
+import OrderAgreeCheckbox from "./components/OrderAgreeCheckbox";
 
-// import { selector, useRecoilValue } from "recoil";
-// import { orderItemsState } from "./atoms.store";
+import { useRecoilValue } from "recoil";
+import { selectedOptions } from "./store/order.store";
 
 type Props = Pick<
   Product,
@@ -17,26 +19,7 @@ type Props = Pick<
 >;
 
 const OrderPage = () => {
-  const items = [
-    {
-      productId: 5,
-      selectedOption: {
-        stockCount: 30,
-        name: "돌다리농원 100% 예산 순수생사과즙 100포(50포x2BOX 묶음상품)",
-        price: 57000,
-      },
-      count: 2,
-    },
-    {
-      productId: 5,
-      selectedOption: {
-        stockCount: 30,
-        name: "돌다리농원 100% 예산 순수생사과즙 100포(50포x2BOX 묶음상품)",
-        price: 57000,
-      },
-      count: 2,
-    },
-  ];
+  const items = useRecoilValue(selectedOptions);
 
   const sum = items.reduce((totalPrice, item) => {
     totalPrice += item.selectedOption.price;
@@ -47,36 +30,48 @@ const OrderPage = () => {
 
   const [itemInfo, setItemInfo] = useState<Props | null>(null);
 
-  const [formInputs, setFormInputs] = useState<{
-    ordererName: string;
-    address: string;
-    addressDetail: string;
-    email: string;
-    zipcode: string;
-    tel: string;
-  }>({
-    ordererName: "",
-    email: "",
-    address: "",
-    addressDetail: "",
-    zipcode: "",
-    tel: "",
-  });
-
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.currentTarget;
-    setFormInputs((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   /**
    * 무료배송 요건 충족 변수
    */
   const isFreeShipping = useMemo(() => {
     return itemInfo ? itemInfo.freeShippingCondition < sum : false;
   }, [itemInfo, sum]);
+
+  const [agrees, setAgrees] = useState<{
+    all: boolean;
+    privacy: boolean;
+    purchase: boolean;
+  }>({
+    all: false,
+    privacy: false,
+    purchase: false,
+  });
+
+  // 동의
+  const handleInputCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, name } = e.currentTarget;
+    if (name === "all") {
+      setAgrees({
+        all: checked,
+        privacy: checked,
+        purchase: checked,
+      });
+    } else {
+      setAgrees((prev) => ({
+        ...prev,
+        [name]: checked,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    const { privacy, purchase } = agrees;
+    const newAll = privacy && purchase;
+    setAgrees((prev) => ({
+      ...prev,
+      all: newAll,
+    }));
+  }, [agrees.privacy, agrees.purchase]);
 
   useEffect(() => {
     (async () => {
@@ -88,46 +83,29 @@ const OrderPage = () => {
 
   return (
     <S.Container>
+      <S.Title>결제하기</S.Title>
       <S.Wrapper>
-        <WhiteContainer title="주문 상품 정보">
-          <ProductContainer
-            selectedProducts={items}
-            thumbnail={itemInfo?.imageUrls[0]}
-            prdName={itemInfo?.name}
-          />
-          <DeliveryPriceContainer isFreeShipping={isFreeShipping} sum={sum} />
-        </WhiteContainer>
+        <S.BigBoxes>
+          <WhiteContainer title="주문 상품 정보">
+            <ProductContainer
+              selectedProducts={items}
+              thumbnail={itemInfo?.imageUrls[0]}
+              prdName={itemInfo?.name}
+            />
+            <DeliveryPriceContainer isFreeShipping={isFreeShipping} sum={sum} />
+          </WhiteContainer>
 
-        <S.Form>
-          <WhiteContainer title="주문자 정보">
-            <S.Input
-              type="text"
-              name="ordererName"
-              placeholder="이름"
-              onChange={handleInput}
-              required
-            />
-            <S.Input
-              type="tel"
-              placeholder="연락처"
-              onChange={handleInput}
-              required
-            />
-            <S.Input
-              type="email"
-              name="email"
-              placeholder="이메일(선택)"
-              onChange={handleInput}
-            />
-          </WhiteContainer>
-          <WhiteContainer title="배송 정보">
-            <OrderDeliveryContainer
-              handleInput={handleInput}
-              setFormInputs={setFormInputs}
-              {...formInputs}
-            />
-          </WhiteContainer>
-          <WhiteContainer title="주문 요약">
+          <S.Form>
+            <WhiteContainer title="주문자 정보">
+              <OrderOrdererInfo />
+            </WhiteContainer>
+            <WhiteContainer title="배송 정보">
+              <OrderDeliveryInfo />
+            </WhiteContainer>
+          </S.Form>
+        </S.BigBoxes>
+        <S.SmallBoxes>
+          <WhiteContainer title="주문 요약" small>
             <S.ItemWrapper>
               <div>상품가격</div>
               <div>{sumText}원</div>
@@ -146,7 +124,7 @@ const OrderPage = () => {
               <div>{sumText}원</div>
             </S.ItemWrapper>
           </WhiteContainer>
-          <WhiteContainer title="결제 수단">
+          <WhiteContainer title="결제 수단" small>
             <S.ItemWrapper>
               <div>
                 <S.Input
@@ -186,7 +164,7 @@ const OrderPage = () => {
               구매조건 확인 및 결제진행에 동의
             </OrderAgreeCheckbox>
           </WhiteContainer>
-        </S.Form>
+        </S.SmallBoxes>
       </S.Wrapper>
     </S.Container>
   );
@@ -207,11 +185,10 @@ S.Container = styled.div`
   }
 `;
 
-S.Wrapper = styled.div`
-  max-width: 860px;
+S.Title = styled.h1`
+  text-align: center;
+  margin: 50px 0;
 `;
-
-S.Title = styled.h3``;
 
 S.DeliveryPriceContainer = styled.div``;
 
@@ -224,6 +201,21 @@ S.ItemWrapper = styled.div`
 S.Image = styled.img`
   width: 80px;
   height: 80px;
+`;
+
+S.Wrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+`;
+
+S.BigBoxes = styled.div`
+  display: inline-block;
+  margin-right: 16px;
+`;
+S.SmallBoxes = styled.div`
+  display: inline-block;
+  position: sticky;
+  top: 110px;
 `;
 
 S.ContentsWrapper = styled.div``;

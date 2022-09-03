@@ -1,27 +1,20 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { ReactNode } from "react";
 
-const Modal = ({
-  visible = true,
-  title,
-  onOk,
-  onCancel,
-  noFooter = false,
-  children,
-}: any) => {
+type Props = {
+  title: string;
+  onCancel: () => void;
+  children: ReactNode;
+};
+
+const Modal = ({ title, onCancel, children }: Props) => {
   return (
-    <S.Overlay visible={visible}>
+    <S.Overlay onClick={onCancel}>
       <S.Container>
         <S.Header>
           <S.Title>{title}</S.Title>
-          <S.ExitButton onClick={onCancel} />
         </S.Header>
         {children}
-        <S.Footer noFooter={noFooter}>
-          <S.CancelButton onClick={onCancel} reverse>
-            취소
-          </S.CancelButton>
-          <S.OkButton onClick={onOk}>확인</S.OkButton>
-        </S.Footer>
       </S.Container>
     </S.Overlay>
   );
@@ -31,7 +24,7 @@ export default Modal;
 
 const S: any = {};
 
-S.Overlay = styled.div<{ visible: boolean }>`
+S.Overlay = styled.div`
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -42,60 +35,22 @@ S.Overlay = styled.div<{ visible: boolean }>`
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.25);
-  ${({ visible }) =>
-    visible
-      ? null
-      : css`
-          display: none;
-        `}
+  z-index: 2;
 `;
 
 S.Container = styled.div`
   background-color: #ffffff;
+  width: 80vw;
+  max-width: 500px;
 `;
 
 S.Header = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  border-bottom: 1 solid #424242;
-  padding: 2rem;
+  border-bottom: 1px solid #f3f3f3;
 `;
 
 S.Title = styled.h1`
-  font-size: 1.2rem;
+  font-size: 14px;
 `;
-
-S.ExitButton = styled.button`
-  background: url("/image/icon_exit.svg") no-repeat center/contain;
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 0px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-S.Footer = styled.div<{ noFooter: boolean }>`
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  border-top: 1 solid #424242;
-  padding: 2rem;
-  ${({ noFooter }) =>
-    noFooter
-      ? css`
-          display: none;
-        `
-      : null}
-`;
-
-S.Button = styled.button`
-  height: 3rem;
-  width: 6rem;
-  border-radius: 0.4rem;
-`;
-
-S.CancelButton = styled(S.Button)``;
-
-S.OkButton = styled(S.Button)``;
