@@ -162,8 +162,29 @@ const OrderPage = () => {
               </div>
             </S.ItemWrapper>
           </WhiteContainer>
-          <WhiteContainer title="">
-            <S.Title>{/* 전체동의 => 개인정보 & 구매조건 */}</S.Title>
+          <WhiteContainer title="" small>
+            <OrderAgreeCheckbox
+              name="all"
+              checked={agrees.all}
+              onChange={handleInputCheckbox}
+            >
+              전체 동의
+            </OrderAgreeCheckbox>
+            <OrderAgreeCheckbox
+              name="privacy"
+              checked={agrees.privacy}
+              onChange={handleInputCheckbox}
+            >
+              개인정보 수집 및 이용 동의
+              <a href="#">약관보기</a>
+            </OrderAgreeCheckbox>
+            <OrderAgreeCheckbox
+              name="purchase"
+              checked={agrees.purchase}
+              onChange={handleInputCheckbox}
+            >
+              구매조건 확인 및 결제진행에 동의
+            </OrderAgreeCheckbox>
           </WhiteContainer>
         </S.Form>
       </S.Wrapper>
