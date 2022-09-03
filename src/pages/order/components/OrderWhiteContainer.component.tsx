@@ -12,8 +12,8 @@ const OrderWhiteContainer = ({
   small?: boolean;
 }) => {
   return (
-    <S.Container>
-      <S.Title>{title}</S.Title>
+    <S.Container className={small ? "small" : ""}>
+      {title && <S.Title>{title}</S.Title>}
       {children}
     </S.Container>
   );
@@ -28,6 +28,9 @@ S.Container = styled.div`
   padding: 24px;
   width: 520px;
   margin-bottom: 16px;
+  &.small {
+    width: 325px;
+  }
 `;
 
 S.Title = styled.h6`
