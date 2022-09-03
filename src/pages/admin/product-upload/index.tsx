@@ -1,6 +1,34 @@
+import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
+import useInput from "./hooks/useInput";
+
+interface Option {
+  stockCount: number;
+  name: string;
+  price: number;
+}
 
 const AdminUploadPage = () => {
+  const dcPrice = useInput(0);
+  const originPrice = useInput(0);
+  const deliveryFee = useInput(0);
+  const freeShippingCondition = useInput(0);
+
+  const imgUrl = useInput("");
+  const location = useInput("");
+  const description = useInput("");
+  const productName = useInput("");
+
+  const [visible, setVisible] = useState<boolean>(true);
+  const [imgUrlList, setImgUrlList] = useState<string[]>([]);
+  const [optionList, setOptionList] = useState<Option[]>([]);
+
+  const onChangeVisible = (event: ChangeEvent<HTMLInputElement>) => {
+    setVisible(event.currentTarget.checked);
+  };
+  const onClickUploadImg = () => {
+    setImgUrlList((prev) => [...prev, imgUrl.value]);
+  };
   return (
     <Container>
       <Header>
@@ -13,18 +41,42 @@ const AdminUploadPage = () => {
           <PricingInofBox>
             <h3>Pricing Info</h3>
             <label>원가</label>
-            <input placeholder="내용을 입력해주세요" />
+            <input
+              type="number"
+              min={0}
+              {...originPrice}
+              placeholder="내용을 입력해주세요"
+            />
             <label>할인가</label>
-            <input placeholder="내용을 입력해주세요" />
+            <input
+              min={0}
+              type="text"
+              {...dcPrice}
+              placeholder="내용을 입력해주세요"
+            />
             <label>배송비</label>
-            <input placeholder="내용을 입력해주세요" />
+            <input
+              min={0}
+              type="number"
+              {...deliveryFee}
+              placeholder="내용을 입력해주세요"
+            />
             <label>무료배송조건비용</label>
-            <input placeholder="내용을 입력해주세요" />
+            <input
+              min={0}
+              type="number"
+              {...freeShippingCondition}
+              placeholder="내용을 입력해주세요"
+            />
           </PricingInofBox>
           <PricingInofBox>
             <h3>Visibility Status</h3>
             <label>
-              <input type="checkbox" defaultChecked />
+              <input
+                type="checkbox"
+                defaultChecked={visible}
+                onChange={onChangeVisible}
+              />
               visible
             </label>
           </PricingInofBox>
@@ -32,16 +84,24 @@ const AdminUploadPage = () => {
         <StaticContainer>
           <h3>Basic Information</h3>
           <label>상품명</label>
-          <input placeholder="내용을 입력해 주세요" />
+          <input
+            type="text"
+            {...productName}
+            placeholder="내용을 입력해 주세요"
+          />
           <label>이미지 업로드</label>
           <span>
-            <input placeholder="내용을 입력해 주세요" />
-            <button>+</button>
+            <input type="text" {...imgUrl} placeholder="내용을 입력해 주세요" />
+            <button onClick={onClickUploadImg}>+</button>
           </span>
           <label>원산지</label>
-          <input placeholder="내용을 입력해 주세요" />
+          <input type="text" {...location} placeholder="내용을 입력해 주세요" />
           <label>상품설명</label>
-          <input placeholder="내용을 입력해 주세요" />
+          <input
+            type="text"
+            {...description}
+            placeholder="내용을 입력해 주세요"
+          />
           <button>옵션추가</button>
         </StaticContainer>
       </section>
