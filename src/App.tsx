@@ -27,6 +27,7 @@ function App() {
             <Route path="product-upload" element={<AdminUploadPage />} />
             <Route path="product-list" element={<AdminProductListPage />} />
           </Route>
+          <Route path="test" element={<Test />} />
         </Routes>
         <Footer />
       </BrowserRouter>
