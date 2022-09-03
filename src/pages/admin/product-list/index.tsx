@@ -28,7 +28,30 @@ type Product = {
 
 const AdminProductListPage = () => {
   const [productList, setProductList] = useState<Product[]>([]);
+  const [toggle, setToggle] = useState<boolean>();
 
+  const onRemove = (id: number) => {
+    const newList = productList.filter((data: Product) => {
+      return data.id !== id;
+    });
+    setProductList(newList);
+  };
+
+  const onBehind = (id: number) => {
+    const behindList = productList.filter((data: Product) => {
+      return data.id === id;
+    });
+    setToggle(!!behindList[0].visible);
+    console.log(toggle);
+  };
+
+  const ChooseRemove = () => {};
+
+  const onAllRemove = () => {
+    setProductList([]);
+  };
+
+  const onAllBehind = () => {};
   useEffect(() => {
     fetch("http://localhost:3000/mockup-data/products.json", {
       method: "GET",
@@ -42,17 +65,41 @@ const AdminProductListPage = () => {
   return (
     <Wrapper>
       <PaddingButton>
-        <button> 전체 숨김 </button>
-        <button> 전체 삭제 </button>
+        <button
+          onClick={() => {
+            if (window.confirm(`전체 숨김을 하시겠습니까?`)) {
+              onAllBehind();
+            }
+          }}
+        >
+          {" "}
+          전체 숨김{" "}
+        </button>
+        <button
+          onClick={() => {
+            if (window.confirm(`전체 삭제를 하시겠습니까?`)) {
+              onAllRemove();
+            }
+          }}
+        >
+          {" "}
+          전체 삭제{" "}
+        </button>
       </PaddingButton>
       <PaddingButton>
         <button> 선택된 항목 숨김 </button>
-        <button> 선택된 항목 삭제 </button>
+        <button onClick={ChooseRemove}> 선택된 항목 삭제 </button>
       </PaddingButton>
       <ProductListContainer>
         {productList?.map((product: Product) => {
           console.log(product);
-          return <ProductItem product={product} />;
+          return (
+            <ProductItem
+              product={product}
+              onRemove={onRemove}
+              onBehind={onBehind}
+            />
+          );
         })}
       </ProductListContainer>
     </Wrapper>

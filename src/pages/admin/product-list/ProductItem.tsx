@@ -24,7 +24,15 @@ type Product = {
   visible: boolean;
 };
 
-const ProductItem = ({ product }: { product: Product }) => {
+const ProductItem = ({
+  product,
+  onRemove,
+  onBehind,
+}: {
+  product: Product;
+  onRemove: (id: number) => void;
+  onBehind: (id: number) => void;
+}) => {
   const { imageUrls, name } = product;
   const img = imageUrls[0];
 
@@ -34,8 +42,24 @@ const ProductItem = ({ product }: { product: Product }) => {
       <Img src={img} alt="상품 이미지" />
       <ProductName>{name}</ProductName>
       <Buttons>
-        <Button>숨김</Button>
-        <Button>삭제</Button>
+        <Button
+          onClick={() => {
+            if (window.confirm(`${product.name}를 숨기시겠습니까?`)) {
+              onBehind(product.id);
+            }
+          }}
+        >
+          숨김
+        </Button>
+        <Button
+          onClick={() => {
+            if (window.confirm(`${product.name}를 삭제하시겠습니까?`)) {
+              onRemove(product.id);
+            }
+          }}
+        >
+          삭제
+        </Button>
       </Buttons>
     </Wrapper>
   );
