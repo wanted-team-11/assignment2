@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { getData } from "./api";
 import { Product } from "./types";
 
-import WhiteContainer from "./components/OrderWhiteContainer.component";
-import ProductContainer from "./components/OrderProductContainer.component";
+import WhiteContainer from "./components/OrderWhiteContainer";
+import ProductContainer from "./components/OrderProductContainer";
 import DeliveryPriceContainer from "./components/OrderDeliveryPriceContainer";
 import OrderDeliveryContainer from "./components/OrderDeliveryContainer";
 
