@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import styled from "styled-components";
 import useInput from "./hooks/useInput";
 
@@ -28,6 +28,10 @@ const AdminUploadPage = () => {
   };
   const onClickUploadImg = () => {
     setImgUrlList((prev) => [...prev, imgUrl.value]);
+    imgUrl.resetValue();
+  };
+  const onClickRemoveImg = (url: string) => {
+    setImgUrlList((prev) => prev.filter((item) => item !== url));
   };
   return (
     <Container>
@@ -44,28 +48,32 @@ const AdminUploadPage = () => {
             <input
               type="number"
               min={0}
-              {...originPrice}
+              value={originPrice.value}
+              onChange={originPrice.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>할인가</label>
             <input
               min={0}
-              type="text"
-              {...dcPrice}
+              type="number"
+              value={dcPrice.value}
+              onChange={dcPrice.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>배송비</label>
             <input
               min={0}
               type="number"
-              {...deliveryFee}
+              value={deliveryFee.value}
+              onChange={deliveryFee.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>무료배송조건비용</label>
             <input
               min={0}
               type="number"
-              {...freeShippingCondition}
+              value={freeShippingCondition.value}
+              onChange={freeShippingCondition.onChange}
               placeholder="내용을 입력해주세요"
             />
           </PricingInofBox>
@@ -86,20 +94,42 @@ const AdminUploadPage = () => {
           <label>상품명</label>
           <input
             type="text"
-            {...productName}
+            value={productName.value}
+            onChange={productName.onChange}
             placeholder="내용을 입력해 주세요"
           />
           <label>이미지 업로드</label>
           <span>
-            <input type="text" {...imgUrl} placeholder="내용을 입력해 주세요" />
+            <input
+              type="text"
+              value={imgUrl.value}
+              onChange={imgUrl.onChange}
+              placeholder="내용을 입력해 주세요"
+            />
             <button onClick={onClickUploadImg}>+</button>
           </span>
+          <ul>
+            {imgUrlList.map((item, index) => (
+              <li
+                key={`img-url-${index}`}
+                onClick={() => onClickRemoveImg(item)}
+              >
+                <img src={item} alt="thumbnail" width={100} height={100} />
+              </li>
+            ))}
+          </ul>
           <label>원산지</label>
-          <input type="text" {...location} placeholder="내용을 입력해 주세요" />
+          <input
+            type="text"
+            value={location.value}
+            onChange={location.onChange}
+            placeholder="내용을 입력해 주세요"
+          />
           <label>상품설명</label>
           <input
             type="text"
-            {...description}
+            value={description.value}
+            onChange={description.onChange}
             placeholder="내용을 입력해 주세요"
           />
           <button>옵션추가</button>
@@ -131,6 +161,15 @@ const StaticContainer = styled.div`
   border-radius: 3px;
   gap: 10px;
   padding: 10px;
+  ul {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    gap: 4px;
+    li {
+      list-style: none;
+    }
+  }
 `;
 
 const StickyContainer = styled.div`
