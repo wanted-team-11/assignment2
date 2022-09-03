@@ -1,86 +1,128 @@
-import { useState } from "react";
 import styled from "styled-components";
-const AdminUploadPage = () => {
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [name, setName] = useState<string>();
-  const [location, setLocation] = useState<string>();
-  const [dcPrice, setDcPrice] = useState<number>(0);
-  const [originalPrice, setOriginalPrice] = useState<number>(0);
-  const [deliveryFee, setDeliveryFee] = useState<number>(0);
-  const [freeShippingCondition, setFreeShippingCondition] = useState<number>(0);
-  const [visible, setVisible] = useState<boolean>(true);
 
+const AdminUploadPage = () => {
   return (
     <Container>
-      <UploadBox>+</UploadBox>
-      <DescribtioniTextArea placeholder="제품 설명" />
-      <InfoRegistrationDiv>
-        <Input placeholder="제목" />
-        <Input placeholder="지역" />
-        <Input placeholder="가격" />
-        <Input placeholder="할인가" />
-        <Input placeholder="옵션" />
-        <Input placeholder="배송비" />
-        <Input placeholder="무료배송 최소 주문가격" />
-        <Input placeholder="수량" />
-      </InfoRegistrationDiv>
-      <SubmitButton>Submit</SubmitButton>
+      <Header>
+        <h1>Products Add</h1>
+        <SubmitButton>SAVE</SubmitButton>
+      </Header>
+      <HR />
+      <section>
+        <StickyContainer>
+          <PricingInofBox>
+            <h3>Pricing Info</h3>
+            <label>원가</label>
+            <input placeholder="내용을 입력해주세요" />
+            <label>할인가</label>
+            <input placeholder="내용을 입력해주세요" />
+            <label>배송비</label>
+            <input placeholder="내용을 입력해주세요" />
+            <label>무료배송조건비용</label>
+            <input placeholder="내용을 입력해주세요" />
+          </PricingInofBox>
+          <PricingInofBox>
+            <h3>Visibility Status</h3>
+            <label>
+              <input type="checkbox" defaultChecked />
+              visible
+            </label>
+          </PricingInofBox>
+        </StickyContainer>
+        <StaticContainer>
+          <h3>Basic Information</h3>
+          <label>상품명</label>
+          <input placeholder="내용을 입력해 주세요" />
+          <label>이미지 업로드</label>
+          <span>
+            <input placeholder="내용을 입력해 주세요" />
+            <button>+</button>
+          </span>
+          <label>원산지</label>
+          <input placeholder="내용을 입력해 주세요" />
+          <label>상품설명</label>
+          <input placeholder="내용을 입력해 주세요" />
+          <button>옵션추가</button>
+        </StaticContainer>
+      </section>
     </Container>
   );
 };
 export default AdminUploadPage;
 
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: white;
+const PricingInofBox = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  height: fit-content;
+  background-color: white;
+  padding: 10px;
+  gap: 10px;
+  border: 1px solid #f0f0f0;
+  border-radius: 3px;
+`;
+const StaticContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 62%;
+  height: fit-content;
+  background-color: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 3px;
+  gap: 10px;
+  padding: 10px;
+`;
+
+const StickyContainer = styled.div`
+  top: 50px;
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  height: 0;
   gap: 10px;
 `;
 
-const UploadBox = styled.button`
-  background-color: transparent;
-  width: 400px;
-  height: 200px;
-  border-radius: 10px;
-  border-color: gray;
-  border-style: dashed;
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  cursor: pointer;
+  background-color: #f9fbfd;
+  section {
+    width: inherit;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+`;
+const Header = styled.div`
+  width: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  h1 {
+    margin: 0px;
+  }
 `;
 
-const Input = styled.input`
-  width: 190px;
-  height: 40px;
-  border: 1px solid gray;
-  border-radius: 5px;
-`;
-const DescribtioniTextArea = styled.textarea`
-  min-width: 400px;
-  max-width: 400px;
-  min-height: 100px;
-  max-height: 200px;
-`;
-const InfoRegistrationDiv = styled.div`
-  display: flex;
-  width: 400px;
-  height: fit-content;
-  flex-wrap: wrap;
-  gap: 8px;
-`;
 const SubmitButton = styled.button`
-  width: 400px;
+  width: 140px;
   height: 40px;
+  border: none;
   border-radius: 5px;
   background-color: green;
   color: white;
-  font-size: 2rem;
-  font-weight: bold;
-  border-style: none;
+  font-size: 14px;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
+`;
+const HR = styled.hr`
+  width: 100%;
 `;
