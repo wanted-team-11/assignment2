@@ -108,16 +108,21 @@ const AdminUploadPage = () => {
             />
             <button onClick={onClickUploadImg}>+</button>
           </span>
-          <ul>
-            {imgUrlList.map((item, index) => (
-              <li
-                key={`img-url-${index}`}
-                onClick={() => onClickRemoveImg(item)}
-              >
-                <img src={item} alt="thumbnail" width={100} height={100} />
-              </li>
-            ))}
-          </ul>
+          {imgUrlList.length ? (
+            <ul>
+              {imgUrlList.map((item, index) => (
+                <li
+                  key={`img-url-${index}`}
+                  onClick={() => onClickRemoveImg(item)}
+                >
+                  <img src={item} alt="thumbnail" width={100} height={100} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>이미지를 추가해 주세요</p>
+          )}
+
           <label>원산지</label>
           <input
             type="text"
@@ -133,6 +138,15 @@ const AdminUploadPage = () => {
             placeholder="내용을 입력해 주세요"
           />
           <button>옵션추가</button>
+          <ul>
+            {optionList.map((option, index) => (
+              <li key={`option-${index}`}>
+                <p>옵션: {option.name}</p>
+                <p>가격: {option.price}원</p>
+                <p>수량: {option.stockCount}</p>
+              </li>
+            ))}
+          </ul>
         </StaticContainer>
       </section>
     </Container>
