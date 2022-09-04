@@ -24,6 +24,7 @@ const AdminProductListPage = () => {
 
   return (
     <Wrapper>
+      <Header>상품 목록 관리 페이지</Header>
       <PaddingButton>
         <Button onClick={onAllBehind}>전체 숨김</Button>
         <Button onClick={showAllProduct}>전체 노출</Button>
@@ -54,26 +55,31 @@ const AdminProductListPage = () => {
 
 export default AdminProductListPage;
 
-export const Wrapper = styled.div`
+const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
   position: relative;
 `;
 
-export const PaddingButton = styled.div`
+const Header = styled.h1`
+  display: flex;
+  justify-content: center;
+`;
+
+const PaddingButton = styled.div`
   display: flex;
   padding: 15px 0px 5px 27px;
   margin: 0 22.5vw;
   gap: 10px;
 `;
 
-export const ProductListContainer = styled.div`
+const ProductListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
 
-export const Button = styled.button`
+const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
