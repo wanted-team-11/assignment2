@@ -1,0 +1,38 @@
+import React from "react";
+import * as S from "./styles/PageButton.styled";
+import { useRecoilValue } from "recoil";
+import { productListAtom } from "../store/product.store";
+
+const PageButton = ({
+  getNextData,
+}: {
+  getNextData: (buttonIndex: number) => Promise<void>;
+}) => {
+  return (
+    <S.PageButtonWrapper>
+      <S.PaginationButton
+        onClick={() => {
+          getNextData(0);
+        }}
+      >
+        1
+      </S.PaginationButton>
+      <S.PaginationButton
+        onClick={() => {
+          getNextData(1);
+        }}
+      >
+        2
+      </S.PaginationButton>
+      <S.PaginationButton
+        onClick={() => {
+          getNextData(2);
+        }}
+      >
+        3
+      </S.PaginationButton>
+    </S.PageButtonWrapper>
+  );
+};
+
+export default PageButton;
