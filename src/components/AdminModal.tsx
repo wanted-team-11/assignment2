@@ -1,6 +1,5 @@
 import { ReactNode, Dispatch, useRef } from "react";
 import styled from "styled-components";
-// import useAdminOnClickOutside from "../pages/admin/product-upload/hooks/useAdminOnClickOutside";
 import useAdminOnClickOutside from "../hooks/useAdminOnClickOutside";
 
 interface ModalProps {

@@ -2,10 +2,6 @@ import * as S from "./styles/GNB.styled";
 import { NavLink } from "react-router-dom";
 
 const GNB = () => {
-  const test = (b: boolean) => {
-    console.log("wah");
-    return "";
-  };
   return (
     <>
       <S.GNBWrapper>
