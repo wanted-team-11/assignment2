@@ -5,7 +5,7 @@ const InfoArea = () => {
     <>
       <S.LogoAndDescWrapper>
         <S.LogoImage
-          alt=""
+          alt="fruitte logo"
           src="https://cdn.imweb.me/upload/S201907022014f7de8adf6/075897ae563f4.png"
         />
         <S.Title>프루떼 [수확배송]</S.Title>

@@ -33,10 +33,9 @@ export const SubImgContainer = styled.div`
   display: flex;
 `;
 
-export const ProductSubImg = styled.div`
+export const ProductSubImg = styled.img`
   margin-top: 15px;
-  background-color: coral;
-  border: 1px solid black;
+  cursor: pointer;
   width: 50px;
   height: 50px;
 `;
@@ -87,7 +86,8 @@ export const DescriptionWatingTag = styled(DescriptionBestTag)`
 `;
 export const ProductDetailContainer = styled.div`
   display: flex;
-  margin-top: 40px;
+
+  margin-top: 450px;
 `;
 export const PriceContainer = styled.div`
   display: flex;
@@ -117,7 +117,7 @@ export const ProductSalePrice = styled.div`
 `;
 
 export const ProductLocationContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 
 export const ProductLocation = styled.div`
@@ -161,7 +161,7 @@ export const Option = styled.div`
   justify-content: center;
   font-size: 20px;
   width: 430px;
-  height: 45px;
+  height: 60px;
   border: 1px solid black;
   padding: 10px;
   :hover {
@@ -226,6 +226,20 @@ export const QuantityMinusButton = styled(QuantityPlusButton)``;
 export const TotalPrice = styled.div`
   font-size: 20px;
   margin-top: 10px;
+`;
+
+export const TotalPriceContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
+export const TotalPriceCounter = styled.div`
+  font-size: 20px;
+`;
+
+export const LastTotalPrice = styled.div`
+  font-size: 20px;
 `;
 export const Detail = styled.div`
   display: flex;
