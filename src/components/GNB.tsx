@@ -20,6 +20,7 @@ const GNB = () => {
           <S.NavLink to="">FRUIT PLAY</S.NavLink>
           <S.NavLink to="">ABOUT US</S.NavLink>
           <S.NavLink to="admin/product-upload">ADMIN</S.NavLink>
+          <S.NavLink to="admin/product-list">ADMIN LIST</S.NavLink>
         </S.LinkContainer>
         <NavLink to="order-list">주문 확인</NavLink>
       </S.Container>
@@ -35,6 +36,7 @@ const S: any = {};
 const Logo = styled.img`
   width: 180px;
   height: 50px;
+  margin: 10px 30px;
 `;
 
 const Container = styled.div`
