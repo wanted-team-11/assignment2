@@ -1,4 +1,13 @@
+import InfoArea from "./components/InfoArea";
+import Products from "./components/Products";
+
 const FruitStorePage = () => {
-  return <div>FruitStorePage</div>;
+  return (
+    <>
+      <InfoArea />
+      <Products />
+    </>
+  );
 };
+
 export default FruitStorePage;
