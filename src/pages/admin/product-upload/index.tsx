@@ -135,6 +135,7 @@ const AdminUploadPage = () => {
             />
             <button onClick={onClickUploadImg}>+</button>
           </span>
+
           <ul>
             {imgUrlList.length ? (
               imgUrlList.map((item, index) => (
@@ -253,7 +254,7 @@ const StaticContainer = styled.div`
     justify-content: flex-start;
     flex-wrap: wrap;
     width: auto;
-    min-height: 220px;
+    min-height: 200px;
 
     border: 2px;
     border-radius: 10px;
@@ -262,8 +263,9 @@ const StaticContainer = styled.div`
     p {
       color: #b9b9b9;
       width: 100%;
-      line-height: 220px;
+      line-height: 200px;
       text-align: center;
+      margin: 0;
     }
     li {
       margin: 5px;
