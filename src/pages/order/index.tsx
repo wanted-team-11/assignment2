@@ -28,10 +28,15 @@ const OrderPage = () => {
   const orderInformation = useRecoilValue(orderInfo);
   const navigate = useNavigate();
 
-  const sum = items.reduce((totalPrice, item) => {
-    totalPrice += item.selectedOption.price;
-    return totalPrice;
-  }, 0);
+  const sum =
+    items !== undefined
+      ? items.reduce((totalPrice, item) => {
+          const { count } = item;
+          const { price } = item.selectedOption;
+          totalPrice += price * count;
+          return totalPrice;
+        }, 0)
+      : 0;
 
   const sumText = Intl.NumberFormat().format(sum);
 
@@ -49,8 +54,9 @@ const OrderPage = () => {
 
   useEffect(() => {
     (async () => {
-      const { imageUrls, name, deliveryFee, freeShippingCondition } =
-        await fetchProductDetail(items[0].productId);
+      if (items === undefined) return;
+      const prd = await fetchProductDetail(items[0].productId);
+      const { imageUrls, name, deliveryFee, freeShippingCondition } = prd;
 
       setItemInfo({ imageUrls, name, deliveryFee, freeShippingCondition });
     })();
@@ -112,7 +118,7 @@ const OrderPage = () => {
   /**
    * 선택된 상품들을 OrderProductsContainer 컴포넌트에 전달하기 위한 변수
    */
-  const productContainerProps = items.map(
+  const productContainerProps = items?.map(
     ({ selectedOption: { name, price }, count }) => {
       return {
         name: itemInfo?.name,
@@ -143,13 +149,22 @@ const OrderPage = () => {
     }, 500);
   };
 
+  useEffect(() => {
+    if (items === undefined) {
+      alert("다시 시도해주세요");
+      navigate(-1);
+    }
+  }, []);
+
   return (
     <S.Container>
       <S.Title>결제하기</S.Title>
       <S.Wrapper>
         <S.BigBoxes>
           <WhiteContainer title="주문 상품 정보">
-            <OrderProductContainer products={productContainerProps} />
+            {productContainerProps !== undefined && (
+              <OrderProductContainer products={productContainerProps} />
+            )}
           </WhiteContainer>
 
           <S.Form>

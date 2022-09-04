@@ -28,7 +28,7 @@ const OrderProductContainer = ({ products }: { products: Props[] }) => {
               <S.Option>
                 {name !== optionName && optionName + "-"} {count}개
               </S.Option>
-              <strong>{Intl.NumberFormat().format(price)}원</strong>
+              <strong>{Intl.NumberFormat().format(price * count)}원</strong>
             </S.ContentsWrapper>
           </S.ItemWrapper>
         ))}

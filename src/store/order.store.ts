@@ -1,30 +1,32 @@
 import { atom, selector } from "recoil";
+import type { SelectedProduct } from "../types/orderTypes";
 
 /**
  * 상품 상세 페이지에서 전달받은 구매 상품 데이터
  */
-export const selectedOptions = atom({
+export const selectedOptions = atom<undefined | SelectedProduct[]>({
   key: "selectedOptions", // unique ID (with respect to other atoms/selectors)
-  default: [
-    {
-      productId: 5,
-      selectedOption: {
-        stockCount: 30,
-        name: "돌다리농원 100% 예산 순수생사과즙 100포(50포x2BOX 묶음상품)",
-        price: 57000,
-      },
-      count: 2,
-    },
-    {
-      productId: 5,
-      selectedOption: {
-        stockCount: 30,
-        name: "돌다리농원 100% 예산 순수생사과즙 100포(50포x2BOX 묶음상품)",
-        price: 57000,
-      },
-      count: 2,
-    },
-  ], // default value (aka initial value)
+  default: undefined,
+  // default: [a
+  //   {
+  //     productId: 5,
+  //     selectedOption: {
+  //       stockCount: 30,
+  //       name: "돌다리농원 100% 예산 순수생사과즙 100포(50포x2BOX 묶음상품)",
+  //       price: 57000,
+  //     },
+  //     count: 2,
+  //   },
+  //   {
+  //     productId: 5,
+  //     selectedOption: {
+  //       stockCount: 30,
+  //       name: "돌다리농원 100% 예산 순수생사과즙 100포(50포x2BOX 묶음상품)",
+  //       price: 57000,
+  //     },
+  //     count: 2,
+  //   },
+  // ], // default value (aka initial value)
 });
 
 /**
