@@ -1,46 +1,47 @@
-# Getting Started with Create React App
+# 원티드 프리온보딩 6차 2차 과제
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📚 기술스택
 
-## Available Scripts
+<div align="center">
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white"/>
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/>
+<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/>
+</div>
+</br>
 
-In the project directory, you can run:
+- 선택 이유
 
-### `npm start`
+  - TypeScript : 정적 타입 지원하므로 컴파일 단계에서 오류를 포착할 수 있고, 여러가지 패러다임을 활용할 수 있어서 채택했다.(절차지향, 객체지향, 함수형)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  - StyleComponent : 컴포넌트화 시켜 다른곳에서도 사용 가능하며, 제일 많이 쓰는 css 라이브러리라 채택했다.  
+    </br>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 😃 과제 소개
 
-### `npm test`
+### 목표
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Fruitte의 스토어 리뉴얼 개발
 
-### `npm run build`
+### 과제 범위
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. 사용자 기능
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- 스토어 상품목록 조회(30개 이상의 상품목록, 10개 단위의 페이지네이션, 인피니트 스크롤 X)
+- 스토어 상품 상세조회(이미지, 상품 옵션, 수량, 가격 등)
+  - 상품 상세 페이지는 단순 퍼블리싱 영역이므로 제외
+- 스토어 상품 주문(상품 선택, 수량, 배송주소, 연락처 등)
+  - 결제 기능은 미포함
+- 스토어 상품 주문 내역확인 (주문 번호, 상품명, 주문 수량, 주문 옵션)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. 관리자 기능
 
-### `npm run eject`
+- 스토어 상품목록 등록 페이지(이미지, 상품 옵션, 수량, 가격 등)
+- 스토어 상품목록 관리 페이지
+  - 상품 삭제 기능
+  - 상품 노출 여부 조정 기능(상품은 유지되어 있되, 노출 여부를 수정하는 기능)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 💡 팀원 소개
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+| <img src="https://avatars.githubusercontent.com/u/16061038?v=4" width="120px" /> | <img src="https://avatars.githubusercontent.com/u/62875596?v=4" width="120px" /> | <img src="https://avatars.githubusercontent.com/u/57490711?v=4" width="120px" /> | <img src="https://avatars.githubusercontent.com/u/97019802?v=4" width="120px" /> | <img src="https://avatars.githubusercontent.com/u/46833758?v=4" width="120px" /> | <img src="https://avatars.githubusercontent.com/u/111843724?v=4" width="120px" /> | <img src="https://avatars.githubusercontent.com/u/66675699?v=4" width="120px" /> | <img src="https://avatars.githubusercontent.com/u/62886997?v=4" width="120px" /> |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **[팀장]정재훈**                                                                 | **김인태**                                                                       | **김항래**                                                                       | **박희주**                                                                       | **오강산**                                                                       | **이미란**                                                                        | **정진우**                                                                       | **현승범**                                                                       |
