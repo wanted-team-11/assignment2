@@ -1,7 +1,9 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
-import ThumbNail from "./components/ThumNail";
+import ThumbNail from "./components/ThumbNail";
+import Modal from "./components/Modal";
 import useInput from "./hooks/useInput";
+import OptionItem from "./components/OptionItem";
 
 interface Option {
   stockCount: number;
@@ -20,7 +22,13 @@ const AdminUploadPage = () => {
   const description = useInput("");
   const productName = useInput("");
 
+  const stockCount = useInput(0);
+  const optionName = useInput("");
+  const optionPrice = useInput(0);
+
   const [visible, setVisible] = useState<boolean>(true);
+  const [modalState, setModalState] = useState<boolean>(false);
+
   const [imgUrlList, setImgUrlList] = useState<string[]>([]);
   const [optionList, setOptionList] = useState<Option[]>([]);
 
@@ -34,6 +42,28 @@ const AdminUploadPage = () => {
   const onClickRemoveImg = (url: string) => {
     setImgUrlList((prev) => prev.filter((item) => item !== url));
   };
+
+  const onClickAddOptionButton = () => {
+    setModalState(true);
+  };
+
+  const onClickAddOption = () => {
+    const newOption = {
+      stockCount: stockCount.value,
+      name: optionName.value,
+      price: optionPrice.value,
+    };
+    setOptionList((prev) => [...prev, newOption]);
+    setModalState(false);
+    stockCount.resetValue();
+    optionName.resetValue();
+    optionPrice.resetValue();
+  };
+
+  const onClickRemoveOption = (option: Option) => {
+    setOptionList((prev) => prev.filter((item) => item.name !== option.name));
+  };
+
   return (
     <Container>
       <Header>
@@ -43,7 +73,7 @@ const AdminUploadPage = () => {
       <HR />
       <section>
         <StickyContainer>
-          <PricingInofBox>
+          <PricingInfoBox>
             <h3>Pricing Info</h3>
             <label>원가</label>
             <input
@@ -73,8 +103,8 @@ const AdminUploadPage = () => {
               onChange={freeShippingCondition.onChange}
               placeholder="내용을 입력해주세요"
             />
-          </PricingInofBox>
-          <PricingInofBox>
+          </PricingInfoBox>
+          <PricingInfoBox>
             <h3>Visibility Status</h3>
             <label>
               <input
@@ -84,7 +114,7 @@ const AdminUploadPage = () => {
               />
               visible
             </label>
-          </PricingInofBox>
+          </PricingInfoBox>
         </StickyContainer>
         <StaticContainer>
           <h3>Basic Information</h3>
@@ -105,19 +135,20 @@ const AdminUploadPage = () => {
             />
             <button onClick={onClickUploadImg}>+</button>
           </span>
-          {imgUrlList.length ? (
-            <ul>
-              {imgUrlList.map((item, index) => (
+
+          <ul>
+            {imgUrlList.length ? (
+              imgUrlList.map((item, index) => (
                 <ThumbNail
                   key={`imgUrl-${index}`}
                   item={item}
                   onClickRemoveImg={onClickRemoveImg}
                 />
-              ))}
-            </ul>
-          ) : (
-            <p>이미지를 추가해 주세요</p>
-          )}
+              ))
+            ) : (
+              <p>이미지를 등록해 주세요</p>
+            )}
+          </ul>
 
           <label>원산지</label>
           <input
@@ -133,24 +164,69 @@ const AdminUploadPage = () => {
             onChange={description.onChange}
             placeholder="내용을 입력해 주세요"
           />
-          <button>옵션추가</button>
-          <ul>
-            {optionList.map((option, index) => (
-              <li key={`option-${index}`}>
-                <p>옵션: {option.name}</p>
-                <p>가격: {option.price}원</p>
-                <p>수량: {option.stockCount}</p>
-              </li>
-            ))}
-          </ul>
+          <button onClick={onClickAddOptionButton}>옵션추가</button>
+          {optionList.length ? (
+            <TableContainer>
+              <thead>
+                <tr>
+                  <TH>옵션명</TH>
+                  <TH>옵션가격</TH>
+                  <TH>옵션수량</TH>
+                  <TH>삭제</TH>
+                </tr>
+              </thead>
+              <tbody>
+                {optionList.map((option, index) => (
+                  <OptionItem
+                    key={`option-${index}`}
+                    option={option}
+                    onClickRemoveOption={onClickRemoveOption}
+                  />
+                ))}
+              </tbody>
+            </TableContainer>
+          ) : (
+            <p>해당 상품의 옵션이 없습니다.</p>
+          )}
         </StaticContainer>
       </section>
+      {modalState && (
+        <Modal setModalState={setModalState}>
+          <h3>옵션추가</h3>
+          <label>옵션이름</label>
+          <input
+            type="text"
+            value={optionName.value}
+            onChange={optionName.onChange}
+            placeholder="내용을 입력해 주세요"
+          />
+          <label>옵션가격</label>
+          <input
+            type="currency"
+            value={optionPrice.value.toLocaleString("KR", {
+              style: "currency",
+              currency: "KRW",
+            })}
+            onChange={optionPrice.onChange}
+            placeholder="내용을 입력해주세요"
+          />
+          <label>옵션개수</label>
+          <input
+            type="number"
+            min="1"
+            value={stockCount.value}
+            onChange={stockCount.onChange}
+            placeholder="내용을 입력해 주세요"
+          />
+          <SubmitButton onClick={onClickAddOption}>추가</SubmitButton>
+        </Modal>
+      )}
     </Container>
   );
 };
 export default AdminUploadPage;
 
-const PricingInofBox = styled.div`
+const PricingInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -172,12 +248,27 @@ const StaticContainer = styled.div`
   border-radius: 3px;
   gap: 10px;
   padding: 10px;
+
   ul {
     display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-    gap: 4px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: auto;
+    min-height: 200px;
+
+    border: 2px;
+    border-radius: 10px;
+    border-color: #b9b9b9;
+    border-style: dashed;
+    p {
+      color: #b9b9b9;
+      width: 100%;
+      line-height: 200px;
+      text-align: center;
+      margin: 0;
+    }
     li {
+      margin: 5px;
       list-style: none;
     }
   }
@@ -237,4 +328,17 @@ const SubmitButton = styled.button`
 
 const HR = styled.hr`
   width: 100%;
+`;
+
+const TableContainer = styled.table`
+  width: 100%;
+  border-top: 1px solid #444444;
+  border-collapse: collapse;
+  overflow-x: hidden;
+`;
+
+const TH = styled.th`
+  border-bottom: 1px solid #444444;
+  padding: 10px;
+  text-align: center;
 `;
