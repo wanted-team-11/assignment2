@@ -23,6 +23,8 @@ const useRemoveProduct = () => {
         setProductList(newList);
         setCheckList([]);
       }
+    } else {
+      alert("선택된 항목이 없습니다.");
     }
   };
 
