@@ -4,6 +4,8 @@ import AdminThumbNail from "../../../components/AdminThumbNail";
 import AdminModal from "../../../components/AdminModal";
 import useAdminInput from "../../../hooks/useAdminInput";
 import AdminOptionItem from "../../../components/AdminOptionItem";
+import { Product } from "../../../types/orderTypes";
+import { useNavigate } from "react-router-dom";
 
 interface Option {
   stockCount: number;
@@ -12,6 +14,7 @@ interface Option {
 }
 
 const AdminUploadPage = () => {
+  const navigate = useNavigate();
   const dcPrice = useAdminInput(0);
   const originPrice = useAdminInput(10000);
   const deliveryFee = useAdminInput(0);
@@ -64,19 +67,40 @@ const AdminUploadPage = () => {
     setOptionList((prev) => prev.filter((item) => item.name !== option.name));
   };
 
+  const onClickUploadProduct = () => {
+    const newID = Date.now();
+    const productObj: Product = {
+      id: newID,
+      imageUrls: imgUrlList,
+      name: productName.value,
+      tags: [],
+      dcPrice: dcPrice.value,
+      originalPrice: originPrice.value,
+      description: description.value,
+      likeCount: 0,
+      options: optionList,
+      location: location.value,
+      deliveryFee: deliveryFee.value,
+      freeShippingCondition: freeShippingCondition.value,
+      visible: visible,
+    };
+    console.log(productObj);
+    navigate("/");
+  };
+
   return (
     <Container>
       <Header>
-        <h1>Products Add</h1>
-        <SubmitButton>SAVE</SubmitButton>
+        <h1>상품 등록</h1>
+        <SubmitButton onClick={onClickUploadProduct}>SAVE</SubmitButton>
       </Header>
       <HR />
       <section>
         <StickyContainer>
           <PricingInfoBox>
-            <h3>Pricing Info</h3>
+            <h3>가격 정보</h3>
             <label>원가</label>
-            <input
+            <Input
               type="currency"
               value={originPrice.value.toLocaleString("KR", {
                 style: "currency",
@@ -86,26 +110,26 @@ const AdminUploadPage = () => {
               placeholder="내용을 입력해주세요"
             />
             <label>할인가</label>
-            <input
+            <Input
               type="currency"
               onChange={dcPrice.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>배송비</label>
-            <input
+            <Input
               type="currency"
               onChange={deliveryFee.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>무료배송조건비용</label>
-            <input
+            <Input
               type="currency"
               onChange={freeShippingCondition.onChange}
               placeholder="내용을 입력해주세요"
             />
           </PricingInfoBox>
           <PricingInfoBox>
-            <h3>Visibility Status</h3>
+            <h3>Visible Status</h3>
             <label>
               <input
                 type="checkbox"
@@ -117,9 +141,9 @@ const AdminUploadPage = () => {
           </PricingInfoBox>
         </StickyContainer>
         <StaticContainer>
-          <h3>Basic Information</h3>
+          <h3>기본 정보</h3>
           <label>상품명</label>
-          <input
+          <Input
             type="text"
             value={productName.value}
             onChange={productName.onChange}
@@ -127,13 +151,13 @@ const AdminUploadPage = () => {
           />
           <label>이미지 업로드</label>
           <span>
-            <input
+            <Input
               type="text"
               value={imgUrl.value}
               onChange={imgUrl.onChange}
               placeholder="내용을 입력해 주세요"
             />
-            <button onClick={onClickUploadImg}>+</button>
+            <AddImgButton onClick={onClickUploadImg}>+</AddImgButton>
           </span>
 
           <ul>
@@ -151,20 +175,22 @@ const AdminUploadPage = () => {
           </ul>
 
           <label>원산지</label>
-          <input
+          <Input
             type="text"
             value={location.value}
             onChange={location.onChange}
             placeholder="내용을 입력해 주세요"
           />
           <label>상품설명</label>
-          <input
+          <Input
             type="text"
             value={description.value}
             onChange={description.onChange}
             placeholder="내용을 입력해 주세요"
           />
-          <button onClick={onClickAddOptionButton}>옵션추가</button>
+          <AddOptionButton onClick={onClickAddOptionButton}>
+            옵션추가
+          </AddOptionButton>
           {optionList.length ? (
             <TableContainer>
               <thead>
@@ -186,7 +212,7 @@ const AdminUploadPage = () => {
               </tbody>
             </TableContainer>
           ) : (
-            <p>해당 상품의 옵션이 없습니다.</p>
+            <OptionText>해당 상품의 옵션이 없습니다.</OptionText>
           )}
         </StaticContainer>
       </section>
@@ -194,14 +220,14 @@ const AdminUploadPage = () => {
         <AdminModal setModalState={setModalState}>
           <h3>옵션추가</h3>
           <label>옵션이름</label>
-          <input
+          <Input
             type="text"
             value={optionName.value}
             onChange={optionName.onChange}
             placeholder="내용을 입력해 주세요"
           />
           <label>옵션가격</label>
-          <input
+          <Input
             type="currency"
             value={optionPrice.value.toLocaleString("KR", {
               style: "currency",
@@ -211,7 +237,7 @@ const AdminUploadPage = () => {
             placeholder="내용을 입력해주세요"
           />
           <label>옵션개수</label>
-          <input
+          <Input
             type="number"
             min="1"
             value={stockCount.value}
@@ -326,6 +352,30 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
+const AddOptionButton = styled(SubmitButton)`
+  width: 100%;
+  font-weight: bold;
+  background-color: #b9b9b9;
+`;
+
+const AddImgButton = styled(AddOptionButton)`
+  width: 32px;
+  height: 32px;
+`;
+
+const OptionText = styled.div`
+  width: auto;
+  min-height: 200px;
+  border: 2px;
+  border-radius: 10px;
+  color: #b9b9b9;
+  border-color: #b9b9b9;
+  border-style: dashed;
+  line-height: 200px;
+  text-align: center;
+  margin: 0;
+`;
+
 const HR = styled.hr`
   width: 100%;
 `;
@@ -341,4 +391,13 @@ const TH = styled.th`
   border-bottom: 1px solid #444444;
   padding: 10px;
   text-align: center;
+`;
+
+const Input = styled.input`
+  width: 250px;
+  height: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  margin-bottom: 10px;
 `;
