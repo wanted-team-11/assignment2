@@ -82,21 +82,7 @@
   },
   {
     "id": 2,
-<<<<<<< HEAD
-<<<<<<< HEAD
     "imageUrls": ["https://cdn.imweb.me/thumbnail/20200715/236fbfcdd9cf2.jpg"],
-=======
-    "imageUrls": [
-      "https://cdn.imweb.me/thumbnail/20200715/236fbfcdd9cf2.jpg",
-      "https://cdn.imweb.me/thumbnail/20200715/236fbfcdd9cf2.jpg",
-      "https://cdn.imweb.me/thumbnail/20200715/236fbfcdd9cf2.jpg",
-      "https://cdn.imweb.me/thumbnail/20200715/236fbfcdd9cf2.jpg",
-      "https://cdn.imweb.me/thumbnail/20200715/236fbfcdd9cf2.jpg"
-    ],
->>>>>>> origin/product-detail
-=======
-    "imageUrls": ["https://cdn.imweb.me/thumbnail/20200715/236fbfcdd9cf2.jpg"],
->>>>>>> origin/product-upload
     "name": "거창 오가네체리자두 3kg 한 상자",
     "tags": ["SALE", "MD", "판매대기"],
     "dcPrice": 29000,
