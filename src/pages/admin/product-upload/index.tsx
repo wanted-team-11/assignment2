@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ThumbNail from "./components/ThumNail";
 import Modal from "./components/Modal";
 import useInput from "./hooks/useInput";
+import OptionItem from "./components/OptionItem";
 
 interface Option {
   stockCount: number;
@@ -165,10 +166,11 @@ const AdminUploadPage = () => {
           <button onClick={onClickAddOptionButton}>옵션추가</button>
           <ul>
             {optionList.map((option, index) => (
-              <li key={`option-${index}`}>
-                {option.name} | {option.price}원 |{option.stockCount}개
-                <button onClick={() => onClickRemoveOption(option)}>X</button>
-              </li>
+              <OptionItem
+                key={`option-${index}`}
+                option={option}
+                onClickRemoveOption={onClickRemoveOption}
+              />
             ))}
           </ul>
         </StaticContainer>
