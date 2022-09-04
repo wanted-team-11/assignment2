@@ -1,6 +1,8 @@
 import * as S from "./style/product-detail.style";
-import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { selectedOptions } from "../../store/order.store";
 import {
   faChevronUp,
   faChevronDown,
@@ -8,10 +10,15 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRecoilState } from "recoil";
-import { quantityAtom } from "./store/price.store";
 
 type Options = {
+  stockCount: number;
+  name: string;
+  price: number;
+};
+
+type Item = {
+  quantity: number;
   stockCount: number;
   name: string;
   price: number;
@@ -48,48 +55,115 @@ const Description = ({
 }: DescriptionProps) => {
   const [dropDown, setDropDown] = useState(false);
   const [except, setExcept] = useState(false);
-  const [addCart, setAddCart] = useState<Options[]>([]);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [optionPrice, setOptionPrice] = useState({});
-  const [quantity, setQuantity] = useRecoilState(quantityAtom);
-  const [values, setValues] = useState({});
+  const [addCart, setAddCart] = useState<Item[]>([]);
+  const [, setSelectedItems] = useRecoilState(selectedOptions);
+  const navigate = useNavigate();
+
+  const totalCount = addCart.reduce((prev, addedItem) => {
+    return prev + addedItem.quantity;
+  }, 0);
+
+  const totalPrice = addCart.reduce((prev, addedItem) => {
+    return prev + addedItem.price * addedItem.quantity;
+  }, 0);
+
+  const totalPriceText = Intl.NumberFormat().format(totalPrice);
 
   const usingDropDown = () => {
     setDropDown(!dropDown);
   };
 
   const addToCart = (option: Options) => {
-    addCart.push(option);
-    console.log(addCart);
+    const { name, price, stockCount } = option;
+    const item: Item = {
+      quantity: 1,
+      stockCount,
+      name,
+      price,
+    };
+
+    setAddCart((prev: Item[]) => {
+      const sameOptions = prev.filter(
+        (addedItem) => addedItem.name === item.name
+      );
+      if (sameOptions.length > 0) {
+        return prev;
+      }
+      return [...prev, item];
+    });
   };
-  const onClickExcept = () => {
-    setExcept(!except);
+  const onClickRemove = (item: Item) => {
+    setAddCart((prev) =>
+      prev.filter((addedItem) => addedItem.name !== item.name)
+    );
   };
 
-  console.log(quantity);
-
-  const plusQuantity = () => {
-    if (quantity > 0) {
-      setIsDisabled(false);
-      return setQuantity(quantity + 1);
-    }
+  const plusQuantity = (item: Item) => {
+    setAddCart((prev) => {
+      return prev.map((addedItem) => {
+        if (addedItem.name === item.name) {
+          return { ...addedItem, quantity: addedItem.quantity + 1 };
+        } else {
+          return addedItem;
+        }
+      });
+    });
   };
-  const minusQuantity = () => {
-    if (quantity === 1) {
-      setIsDisabled(true);
-      return setQuantity(quantity - 1);
-    }
+
+  const minusQuantity = (item: Item) => {
+    setAddCart((prev) => {
+      return prev.map((addedItem) => {
+        if (addedItem.name === item.name) {
+          if (addedItem.quantity > 1) {
+            return { ...addedItem, quantity: addedItem.quantity - 1 };
+          } else {
+            return addedItem;
+          }
+        } else {
+          return addedItem;
+        }
+      });
+    });
+  };
+
+  const purchase = () => {
+    // addCart
+    // type Item = {
+    //   quantity: number;
+    //   name: string;
+    //   price: number;
+    // };
+    const selectedProducts = addCart.map((addedItem) => {
+      const { name, stockCount, price, quantity } = addedItem;
+      return {
+        productId: id,
+        selectedOption: {
+          stockCount,
+          name,
+          price,
+        },
+        count: quantity,
+      };
+    });
+
+    setSelectedItems(selectedProducts);
+    navigate("/order");
   };
 
   const makeComma = (price: number) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
+
   return (
     <>
       <S.DescriptionTitle>{name}</S.DescriptionTitle>
       <S.TagContainer>
-        {tags.map((el) => {
-          return <S.ItemTag type={el}>{el}</S.ItemTag>;
+        {tags.map((el, index) => {
+          return (
+            <S.ItemTag type={el} key={el + index}>
+              {el}
+            </S.ItemTag>
+          );
         })}
       </S.TagContainer>
 
@@ -124,6 +198,7 @@ const Description = ({
                 onClick={() => {
                   addToCart(option);
                 }}
+                key={option.name}
               >
                 <S.OptionName>{option.name}</S.OptionName>
                 <S.OptionPrice>{makeComma(option.price)}원</S.OptionPrice>
@@ -132,40 +207,41 @@ const Description = ({
           })}
 
         {!except &&
-          options.map((option) => {
+          addCart.map((item) => {
             return (
-              <S.SelectInfo>
+              <S.SelectInfo key={item.name}>
                 <S.SelectTitle>
-                  {option.name}
-                  <S.OptionCloseButton onClick={onClickExcept}>
+                  {item.name}
+                  <S.OptionCloseButton onClick={() => onClickRemove(item)}>
                     <FontAwesomeIcon icon={faX} />
                   </S.OptionCloseButton>
                 </S.SelectTitle>
                 <S.SelectQuantity>
                   <S.QuantityContainer>
-                    <S.QuantityMinusButton
-                      onClick={minusQuantity}
-                      disabled={isDisabled}
-                    >
+                    <S.QuantityMinusButton onClick={() => minusQuantity(item)}>
                       -
                     </S.QuantityMinusButton>
-                    <S.Quantity>{quantity}</S.Quantity>
-                    <S.QuantityPlusButton onClick={plusQuantity}>
+                    <S.Quantity>{item.quantity}</S.Quantity>
+                    <S.QuantityPlusButton onClick={() => plusQuantity(item)}>
                       +
                     </S.QuantityPlusButton>
                   </S.QuantityContainer>
-                  <S.TotalPrice>{makeComma(dcPrice * quantity)}원</S.TotalPrice>
+                  <S.TotalPrice>
+                    {makeComma(item.price * item.quantity)}원
+                  </S.TotalPrice>
                 </S.SelectQuantity>
               </S.SelectInfo>
             );
           })}
 
         <S.TotalPriceContainer>
-          <S.TotalPriceCounter>총 상품금액 ({quantity})개</S.TotalPriceCounter>
-          <S.LastTotalPrice>10000원</S.LastTotalPrice>
+          <S.TotalPriceCounter>
+            총 상품금액 ({totalCount})개
+          </S.TotalPriceCounter>
+          <S.LastTotalPrice>{totalPriceText}원</S.LastTotalPrice>
         </S.TotalPriceContainer>
         <S.ButtonContainer>
-          <S.PurchaseButton>구매하기</S.PurchaseButton>
+          <S.PurchaseButton onClick={purchase}>구매하기</S.PurchaseButton>
           <S.CartButton>장바구니</S.CartButton>
           <S.LikeButton>
             <FontAwesomeIcon icon={faHeart} /> {likeCount}
