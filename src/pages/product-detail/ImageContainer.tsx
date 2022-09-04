@@ -1,6 +1,5 @@
 import * as S from "./style/product-detail.style";
-import { Product } from "../order/types";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type ImageContainerProps = {
   id: number;

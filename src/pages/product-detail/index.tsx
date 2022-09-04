@@ -1,9 +1,10 @@
 import { useRecoilValue } from "recoil";
 import * as S from "./style/product-detail.style";
 import ImageContainer from "./ImageContainer";
-import { productListAtom } from "../fruitstore/store/product.store";
+// import { productListAtom } from "../fruitstore/store/product.store";
+import { productListAtom } from "../../store/product.store";
 import { useParams } from "react-router-dom";
-import { Product } from "../order/types";
+import { Product } from "../../types/types";
 import Description from "./Description";
 
 const ProductDetailPage = () => {
