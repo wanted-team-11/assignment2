@@ -1,9 +1,8 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const ProductsListWrapper = styled.div`
   width: 1260px;
   margin: 0 auto;
-  border: 1px solid red;
 `;
 
 export const ProductsListContainer = styled.div`
@@ -69,3 +68,53 @@ export const DescriptionWatingTag = styled(DescriptionBestTag)`
   width: 60px;
   color: black;
 `;
+
+export const ItemTagWrapper = styled.div`
+  display: flex;
+`;
+
+type ItemTagProps = { type: "BEST" | "SALE" | "SOLDOUT" | "판매대기" | string };
+
+export const ItemTag = styled.span<ItemTagProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 25px;
+  font-size: 13px;
+  margin-top: 20px;
+  margin-right: 10px;
+  border: 1px solid #cccccc;
+
+  ${({ type }) =>
+    type === "BEST" &&
+    css`
+      background-color: #ffffff;
+      color: #fe5355;
+      border-color: #cccccc;
+    `}
+
+  ${({ type }) =>
+    type === "SALE" &&
+    css`
+      background-color: #fe5355;
+      color: #ffffff;
+      border-color: #fe5355;
+    `}
+
+    ${({ type }) =>
+    type === "SOLDOUT" &&
+    css`
+      width: 70px;
+      background-color: #666666;
+      color: #ffffff;
+    `}
+
+  ${({ type }) =>
+    type === "판매대기" &&
+    css`
+      width: 60px;
+    `}
+`;
+
+export const ItemTagTitle = styled.p``;

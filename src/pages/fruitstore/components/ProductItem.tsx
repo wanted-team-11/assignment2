@@ -42,6 +42,11 @@ const ProductItem = () => {
                 <S.DcPrice>{dcPriceWithRegex}원</S.DcPrice>
                 <S.OriginalPrice>{origianlPriceWithRegex}원</S.OriginalPrice>
               </S.PriceInfoWrapper>
+              <S.ItemTagWrapper>
+                {el.tags.map((el) => (
+                  <S.ItemTag type={el}>{el}</S.ItemTag>
+                ))}
+              </S.ItemTagWrapper>
             </S.ItemsWrapper>
           );
         })}
