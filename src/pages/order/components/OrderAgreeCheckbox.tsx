@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { ReactNode, useId } from "react";
 
 const OrderAgreeCheckbox = ({
@@ -18,7 +17,7 @@ const OrderAgreeCheckbox = ({
       <input
         type="checkbox"
         id={id}
-        name="all"
+        name={name}
         checked={checked}
         onChange={onChange}
       />

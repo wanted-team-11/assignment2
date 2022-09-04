@@ -1,12 +1,16 @@
-import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { ordererInfoState } from "../store/order.store";
-import styled from "styled-components";
+import * as S from "./styles/OrderOrdererInfo.styled";
+import OrderValidationInput from "./OrderValidationInput";
 
 const OrderOrdererInfo = () => {
   const [formInputs, setFormInputs] = useRecoilState(ordererInfoState);
 
   const { name, tel, email } = formInputs;
+
+  const isValidName = name.length >= 2;
+  const isValidTel = tel.length >= 6;
+  const isValidEmail = email.includes("@");
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
@@ -19,51 +23,38 @@ const OrderOrdererInfo = () => {
   return (
     <>
       <S.Wrapper>
-        <S.Input
+        <OrderValidationInput
           type="text"
           name="name"
           value={name}
           placeholder="이름"
           onChange={handleInput}
           required
+          isValid={isValidName}
+          validationMsg="주문자 이름을 입력해주세요"
         />
-        <S.Input
+        <OrderValidationInput
           type="tel"
           name="tel"
           value={tel}
           placeholder="연락처"
           onChange={handleInput}
           required
+          isValid={isValidTel}
+          validationMsg="올바른 전화번호를 입력하세요"
         />
       </S.Wrapper>
-      <S.Input
+      <OrderValidationInput
         type="email"
         name="email"
         value={email}
         placeholder="이메일(선택)"
         onChange={handleInput}
+        isValid={isValidEmail}
+        validationMsg="올바른 이메일을 입력하세요"
       />
     </>
   );
 };
 
 export default OrderOrdererInfo;
-
-const S: any = {};
-
-S.Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-S.Input = styled.input`
-  width: 100%;
-  height: 36px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 0;
-  margin-bottom: 10px;
-  &:nth-child(2) {
-    margin-left: 10px;
-  }
-`;

@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-
-import styled from "styled-components";
+import * as S from "./styles/OrderWhiteContainer.styled";
 
 const OrderWhiteContainer = ({
   children,
@@ -20,22 +19,3 @@ const OrderWhiteContainer = ({
 };
 
 export default OrderWhiteContainer;
-
-const S: any = {};
-
-S.Container = styled.div`
-  background-color: white;
-  padding: 24px;
-  width: 520px;
-  margin-bottom: 16px;
-  &.small {
-    width: 325px;
-  }
-`;
-
-S.Title = styled.h6`
-  font-weight: bold;
-  font-size: 21px;
-  margin: 0;
-  padding-bottom: 20px;
-`;

@@ -1,5 +1,8 @@
 import { atom } from "recoil";
 
+/**
+ * 상품 상세 페이지에서 전달받은 구매 상품 데이터
+ */
 export const selectedOptions = atom({
   key: "selectedOptions", // unique ID (with respect to other atoms/selectors)
   default: [
@@ -24,6 +27,10 @@ export const selectedOptions = atom({
   ], // default value (aka initial value)
 });
 
+/**
+ * 주문자 정보
+ * - 이름, 전화번호, 이메일(선택)
+ */
 export const ordererInfoState = atom({
   key: "ordererInfo",
   default: {
@@ -33,6 +40,10 @@ export const ordererInfoState = atom({
   },
 });
 
+/**
+ * 배송 정보
+ * - 수령인, 연락처, 우편번호, 주소, 상세주소, 배송메모
+ */
 export const deliveryInfoState = atom({
   key: "deliveryInfo",
   default: {

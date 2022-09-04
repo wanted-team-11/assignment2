@@ -3,15 +3,26 @@ import DaumPostcode from "react-daum-postcode";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { ordererInfoState, deliveryInfoState } from "../store/order.store";
-import styled from "styled-components";
+import OrderValidationInput from "./OrderValidationInput";
+import * as S from "./styles/OrderDeliveryInfo.styled";
+
+const MEMO = [
+  "배송 전에 미리 연락 바랍니다.",
+  "부재시 경비실에 맡겨주세요.",
+  "부재시 전화나 문자를 남겨주세요.",
+];
 
 const OrderDeliveryContainer = () => {
   const [ordererInfo] = useRecoilState(ordererInfoState);
   const [formInputs, setFormInputs] = useRecoilState(deliveryInfoState);
   const [openPostcode, setOpenPostcode] = useState(false);
 
-  const { name, tel, address, addressDetail, zipcode } = formInputs;
+  const { name, tel, address, addressDetail, zipcode, memo } = formInputs;
 
+  const isValidName = name.length >= 2;
+  const isValidTel = tel.length >= 6;
+
+  const [showMemoTextbox, setShowMemoTextbox] = useState(false);
   const handleInput = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -22,6 +33,9 @@ const OrderDeliveryContainer = () => {
       ...prev,
       [name]: value,
     }));
+    // if (name === "memo") {
+    // } else {
+    // }
   };
 
   const handleSelectAddress = ({
@@ -68,26 +82,30 @@ const OrderDeliveryContainer = () => {
         <label htmlFor="sameCheck">주문자 정보와 동일</label>
       </S.CheckboxWrapper>
       <S.Wrapper>
-        <S.Input
+        <OrderValidationInput
           type="text"
           placeholder="수령인"
           onChange={handleInput}
           name="name"
           value={name}
           required
+          isValid={isValidName}
+          validationMsg="2글자 이상 입력해주세요"
         />
-        <S.Input
+        <OrderValidationInput
           type="tel"
           placeholder="연락처"
           onChange={handleInput}
           name="tel"
           value={tel}
           required
+          isValid={isValidTel}
+          validationMsg="올바른 전화번호를 입력해주세요"
         />
       </S.Wrapper>
       <S.Wrapper>
         <S.Input
-          type="address"
+          type="tel"
           placeholder="우편번호"
           value={zipcode}
           onClick={handlePostcode}
@@ -106,7 +124,7 @@ const OrderDeliveryContainer = () => {
       )}
 
       <S.Input
-        type="address"
+        type="text"
         placeholder="주소"
         value={address}
         name="address"
@@ -114,52 +132,37 @@ const OrderDeliveryContainer = () => {
         readOnly
       />
       <S.Input
-        type="address"
+        type="text"
         placeholder="상세주소"
         name="addressDetail"
         value={addressDetail}
         onChange={handleInput}
       />
       <p>배송메모</p>
-      <select onChange={handleInput}>
-        <option>문앞에 </option>
-        <option>문앞에 </option>
-        <option>문앞에 </option>
+      <select name="memo" onChange={handleInput}>
+        <option value="">배송메모를 선택해 주세요.</option>
+        <option value="배송 전에 미리 연락 바랍니다.">
+          배송 전에 미리 연락 바랍니다.
+        </option>
+        <option value="부재시 경비실에 맡겨주세요.">
+          부재시 경비실에 맡겨주세요.
+        </option>
+        <option value="부재시 전화나 문자를 남겨주세요.">
+          부재시 전화나 문자를 남겨주세요.
+        </option>
+        <option value={memo}>직접입력</option>
       </select>
+      {memo === "custom" && (
+        <S.Input
+          type="text"
+          placeholder="배송메모를 입력해주세요"
+          name="memo"
+          value={memo}
+          onChange={handleInput}
+        />
+      )}
     </>
   );
 };
 
 export default OrderDeliveryContainer;
-
-const S: any = {};
-
-S.Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-S.CheckboxWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  font-size: 12px;
-`;
-
-S.Input = styled.input`
-  width: 100%;
-  height: 36px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 0;
-  margin-bottom: 10px;
-  &:nth-child(2) {
-    margin-left: 10px;
-  }
-`;
-
-S.Button = styled.button`
-  width: 25%;
-  height: 36px;
-  margin-left: 10px;
-`;

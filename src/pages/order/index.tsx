@@ -1,19 +1,18 @@
 import { useMemo, useEffect, useState } from "react";
 import styled from "styled-components";
-import { getData } from "./api";
+import { fetchProductDetail } from "./api";
 import { Product } from "./types";
 
 import WhiteContainer from "./components/OrderWhiteContainer";
-import ProductContainer from "./components/OrderProductContainer";
-import DeliveryPriceContainer from "./components/OrderDeliveryPriceContainer";
+import OrderProductContainer from "./components/OrderProductContainer";
 import OrderDeliveryInfo from "./components/OrderDeliveryInfo";
 import OrderOrdererInfo from "./components/OrderOrdererInfo";
-import OrderAgreeCheckbox from "./components/OrderAgreeCheckbox";
+import OrderAgreeCheckboxes from "./components/OrderAgreeCheckboxes";
 
 import { useRecoilValue } from "recoil";
 import { selectedOptions } from "./store/order.store";
 
-type Props = Pick<
+type ItemInfoAttr = Pick<
   Product,
   "imageUrls" | "name" | "deliveryFee" | "freeShippingCondition"
 >;
@@ -28,7 +27,10 @@ const OrderPage = () => {
 
   const sumText = Intl.NumberFormat().format(sum);
 
-  const [itemInfo, setItemInfo] = useState<Props | null>(null);
+  /**
+   * 상품 상세정보
+   */
+  const [itemInfo, setItemInfo] = useState<ItemInfoAttr | null>(null);
 
   /**
    * 무료배송 요건 충족 변수
@@ -36,6 +38,15 @@ const OrderPage = () => {
   const isFreeShipping = useMemo(() => {
     return itemInfo ? itemInfo.freeShippingCondition < sum : false;
   }, [itemInfo, sum]);
+
+  useEffect(() => {
+    (async () => {
+      const { imageUrls, name, deliveryFee, freeShippingCondition } =
+        await fetchProductDetail(items[0].productId);
+
+      setItemInfo({ imageUrls, name, deliveryFee, freeShippingCondition });
+    })();
+  }, []);
 
   const [agrees, setAgrees] = useState<{
     all: boolean;
@@ -47,8 +58,23 @@ const OrderPage = () => {
     purchase: false,
   });
 
-  // 동의
-  const handleInputCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * 선택된 상품들을 OrderProductsContainer 컴포넌트에 전달하기 위한 변수
+   */
+  const productContainerProps = items.map(
+    ({ selectedOption: { name, price }, count }) => {
+      return {
+        name: itemInfo?.name,
+        optionName: name,
+        price,
+        count,
+        thumbnailUrl: itemInfo?.imageUrls[0],
+        freeShippingCondition: itemInfo?.freeShippingCondition,
+      };
+    }
+  );
+
+  const handleAgreeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = e.currentTarget;
     if (name === "all") {
       setAgrees({
@@ -73,26 +99,13 @@ const OrderPage = () => {
     }));
   }, [agrees.privacy, agrees.purchase]);
 
-  useEffect(() => {
-    (async () => {
-      const { imageUrls, name, deliveryFee, freeShippingCondition } =
-        await getData(items[0].productId);
-      setItemInfo({ imageUrls, name, deliveryFee, freeShippingCondition });
-    })();
-  }, []);
-
   return (
     <S.Container>
       <S.Title>결제하기</S.Title>
       <S.Wrapper>
         <S.BigBoxes>
           <WhiteContainer title="주문 상품 정보">
-            <ProductContainer
-              selectedProducts={items}
-              thumbnail={itemInfo?.imageUrls[0]}
-              prdName={itemInfo?.name}
-            />
-            <DeliveryPriceContainer isFreeShipping={isFreeShipping} sum={sum} />
+            <OrderProductContainer products={productContainerProps} />
           </WhiteContainer>
 
           <S.Form>
@@ -104,6 +117,7 @@ const OrderPage = () => {
             </WhiteContainer>
           </S.Form>
         </S.BigBoxes>
+
         <S.SmallBoxes>
           <WhiteContainer title="주문 요약" small>
             <S.ItemWrapper>
@@ -141,29 +155,14 @@ const OrderPage = () => {
             </S.ItemWrapper>
           </WhiteContainer>
           <WhiteContainer title="" small>
-            <OrderAgreeCheckbox
-              name="all"
-              checked={agrees.all}
-              onChange={handleInputCheckbox}
-            >
-              전체 동의
-            </OrderAgreeCheckbox>
-            <OrderAgreeCheckbox
-              name="privacy"
-              checked={agrees.privacy}
-              onChange={handleInputCheckbox}
-            >
-              개인정보 수집 및 이용 동의
-              <a href="#">약관보기</a>
-            </OrderAgreeCheckbox>
-            <OrderAgreeCheckbox
-              name="purchase"
-              checked={agrees.purchase}
-              onChange={handleInputCheckbox}
-            >
-              구매조건 확인 및 결제진행에 동의
-            </OrderAgreeCheckbox>
+            <OrderAgreeCheckboxes
+              all={agrees.all}
+              privacy={agrees.privacy}
+              purchase={agrees.purchase}
+              handleInputCheckbox={handleAgreeCheckbox}
+            />
           </WhiteContainer>
+          <S.PurchaseButton>결제하기</S.PurchaseButton>
         </S.SmallBoxes>
       </S.Wrapper>
     </S.Container>
@@ -213,9 +212,13 @@ S.BigBoxes = styled.div`
   margin-right: 16px;
 `;
 S.SmallBoxes = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   position: sticky;
   top: 110px;
+  & > *:nth-child(3) {
+    margin-bottom: 0;
+  }
 `;
 
 S.ContentsWrapper = styled.div``;
@@ -223,3 +226,14 @@ S.ContentsWrapper = styled.div``;
 S.Form = styled.form``;
 
 S.Input = styled.input``;
+
+S.PurchaseButton = styled.button`
+  background-color: #4c9c2e;
+  color: white;
+  text-align: center;
+  display: block;
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  cursor: pointer;
+`;
