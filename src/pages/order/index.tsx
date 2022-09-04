@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { fetchProductDetail } from "./api";
 import { Product } from "./types";
@@ -10,7 +11,11 @@ import OrderOrdererInfo from "./components/OrderOrdererInfo";
 import OrderAgreeCheckboxes from "./components/OrderAgreeCheckboxes";
 
 import { useRecoilValue } from "recoil";
-import { selectedOptions } from "./store/order.store";
+import {
+  selectedOptions,
+  formValiditySelector,
+  orderInfo,
+} from "./store/order.store";
 
 type ItemInfoAttr = Pick<
   Product,
@@ -19,6 +24,9 @@ type ItemInfoAttr = Pick<
 
 const OrderPage = () => {
   const items = useRecoilValue(selectedOptions);
+  const [isEveryFieldValid, msg] = useRecoilValue(formValiditySelector);
+  const orderInformation = useRecoilValue(orderInfo);
+  const navigate = useNavigate();
 
   const sum = items.reduce((totalPrice, item) => {
     totalPrice += item.selectedOption.price;
@@ -48,6 +56,9 @@ const OrderPage = () => {
     })();
   }, []);
 
+  /**
+   * 결제 전 동의 체크항목들
+   */
   const [agrees, setAgrees] = useState<{
     all: boolean;
     privacy: boolean;
@@ -58,21 +69,7 @@ const OrderPage = () => {
     purchase: false,
   });
 
-  /**
-   * 선택된 상품들을 OrderProductsContainer 컴포넌트에 전달하기 위한 변수
-   */
-  const productContainerProps = items.map(
-    ({ selectedOption: { name, price }, count }) => {
-      return {
-        name: itemInfo?.name,
-        optionName: name,
-        price,
-        count,
-        thumbnailUrl: itemInfo?.imageUrls[0],
-        freeShippingCondition: itemInfo?.freeShippingCondition,
-      };
-    }
-  );
+  const isAllAgree = agrees.all && agrees.privacy && agrees.purchase;
 
   const handleAgreeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = e.currentTarget;
@@ -90,6 +87,9 @@ const OrderPage = () => {
     }
   };
 
+  /**
+   * "전체 동의" 관련 체크박스 동기화
+   */
   useEffect(() => {
     const { privacy, purchase } = agrees;
     const newAll = privacy && purchase;
@@ -98,6 +98,50 @@ const OrderPage = () => {
       all: newAll,
     }));
   }, [agrees.privacy, agrees.purchase]);
+
+  /**
+   * 결제 방식 라디오 항목
+   */
+  const [paymentMethod, setPaymentMethod] = useState("credit-card");
+
+  const handlePaymentRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    setPaymentMethod(value);
+  };
+
+  /**
+   * 선택된 상품들을 OrderProductsContainer 컴포넌트에 전달하기 위한 변수
+   */
+  const productContainerProps = items.map(
+    ({ selectedOption: { name, price }, count }) => {
+      return {
+        name: itemInfo?.name,
+        optionName: name,
+        price,
+        count,
+        thumbnailUrl: itemInfo?.imageUrls[0],
+        freeShippingCondition: itemInfo?.freeShippingCondition,
+      };
+    }
+  );
+
+  const onPurchase = () => {
+    if (!isEveryFieldValid) {
+      alert(msg);
+      return;
+    }
+    if (!isAllAgree) {
+      alert("결제 전 동의해주세요");
+      return;
+    }
+
+    // perform order
+    console.log(orderInformation);
+    setTimeout(() => {
+      alert("주문이 완료되었습니다.");
+      navigate("/");
+    }, 500);
+  };
 
   return (
     <S.Container>
@@ -145,11 +189,21 @@ const OrderPage = () => {
                   type="radio"
                   id={"creditCard"}
                   name={"paymentMethod"}
+                  checked={paymentMethod === "credit-card"}
+                  value="credit-card"
+                  onChange={handlePaymentRadio}
                 />
                 <label htmlFor="creditCard">신용카드</label>
               </div>
               <div>
-                <S.Input type="radio" id={"noAccount"} name={"paymentMethod"} />
+                <S.Input
+                  type="radio"
+                  id={"noAccount"}
+                  name={"paymentMethod"}
+                  checked={paymentMethod === "no-bank"}
+                  value="no-bank"
+                  onChange={handlePaymentRadio}
+                />
                 <label htmlFor="noAccount">무통장입금</label>
               </div>
             </S.ItemWrapper>
@@ -162,7 +216,7 @@ const OrderPage = () => {
               handleInputCheckbox={handleAgreeCheckbox}
             />
           </WhiteContainer>
-          <S.PurchaseButton>결제하기</S.PurchaseButton>
+          <S.PurchaseButton onClick={onPurchase}>결제하기</S.PurchaseButton>
         </S.SmallBoxes>
       </S.Wrapper>
     </S.Container>

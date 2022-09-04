@@ -6,23 +6,17 @@ import { ordererInfoState, deliveryInfoState } from "../store/order.store";
 import OrderValidationInput from "./OrderValidationInput";
 import * as S from "./styles/OrderDeliveryInfo.styled";
 
-const MEMO = [
-  "배송 전에 미리 연락 바랍니다.",
-  "부재시 경비실에 맡겨주세요.",
-  "부재시 전화나 문자를 남겨주세요.",
-];
-
 const OrderDeliveryContainer = () => {
   const [ordererInfo] = useRecoilState(ordererInfoState);
   const [formInputs, setFormInputs] = useRecoilState(deliveryInfoState);
   const [openPostcode, setOpenPostcode] = useState(false);
 
-  const { name, tel, address, addressDetail, zipcode, memo } = formInputs;
+  const { name, tel, address, addressDetail, zipcode, memo, customMemo } =
+    formInputs;
 
   const isValidName = name.length >= 2;
   const isValidTel = tel.length >= 6;
 
-  const [showMemoTextbox, setShowMemoTextbox] = useState(false);
   const handleInput = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -33,9 +27,6 @@ const OrderDeliveryContainer = () => {
       ...prev,
       [name]: value,
     }));
-    // if (name === "memo") {
-    // } else {
-    // }
   };
 
   const handleSelectAddress = ({
@@ -139,25 +130,27 @@ const OrderDeliveryContainer = () => {
         onChange={handleInput}
       />
       <p>배송메모</p>
-      <select name="memo" onChange={handleInput}>
-        <option value="">배송메모를 선택해 주세요.</option>
-        <option value="배송 전에 미리 연락 바랍니다.">
-          배송 전에 미리 연락 바랍니다.
-        </option>
-        <option value="부재시 경비실에 맡겨주세요.">
-          부재시 경비실에 맡겨주세요.
-        </option>
-        <option value="부재시 전화나 문자를 남겨주세요.">
-          부재시 전화나 문자를 남겨주세요.
-        </option>
-        <option value={memo}>직접입력</option>
-      </select>
+      <S.SelectWrapper>
+        <S.Select name="memo" onChange={handleInput}>
+          <option value="">배송메모를 선택해 주세요.</option>
+          <option value="배송 전에 미리 연락 바랍니다.">
+            배송 전에 미리 연락 바랍니다.
+          </option>
+          <option value="부재시 경비실에 맡겨주세요.">
+            부재시 경비실에 맡겨주세요.
+          </option>
+          <option value="부재시 전화나 문자를 남겨주세요.">
+            부재시 전화나 문자를 남겨주세요.
+          </option>
+          <option value="custom">직접입력</option>
+        </S.Select>
+      </S.SelectWrapper>
       {memo === "custom" && (
         <S.Input
           type="text"
           placeholder="배송메모를 입력해주세요"
-          name="memo"
-          value={memo}
+          name="customMemo"
+          value={customMemo}
           onChange={handleInput}
         />
       )}
