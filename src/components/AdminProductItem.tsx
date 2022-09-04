@@ -1,6 +1,6 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
-import styled from "styled-components";
 import { Product } from "../types/types";
+import * as S from "./styles/AdminProductItem.styled";
 
 const AdminProductItem = ({
   product,
@@ -51,16 +51,16 @@ const AdminProductItem = ({
   }, [checkList]);
 
   return (
-    <Wrapper>
-      <CheckBox
+    <S.Wrapper>
+      <S.CheckBox
         type="checkbox"
         checked={isChecked}
         onChange={() => handleCheckList(id)}
       />
-      <Img src={img} alt="상품 이미지" />
-      <ProductName>{name}</ProductName>
-      <Buttons>
-        <Button
+      <S.Img src={img} alt="상품 이미지" />
+      <S.ProductName>{name}</S.ProductName>
+      <S.Buttons>
+        <S.Button
           onClick={() => {
             if (visible && window.confirm(`${name}를 숨기시겠습니까?`)) {
               toggleProduct(id);
@@ -73,8 +73,8 @@ const AdminProductItem = ({
           }}
         >
           {visibleText}
-        </Button>
-        <Button
+        </S.Button>
+        <S.Button
           onClick={() => {
             if (window.confirm(`${name}를 삭제하시겠습니까?`)) {
               onRemove(id);
@@ -82,60 +82,10 @@ const AdminProductItem = ({
           }}
         >
           삭제
-        </Button>
-      </Buttons>
-    </Wrapper>
+        </S.Button>
+      </S.Buttons>
+    </S.Wrapper>
   );
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  position: relative;
-  width: 50vw;
-  min-width: 420px;
-  height: 80px;
-  margin: 30px auto;
-  border: 1px solid gray;
-`;
-
-const CheckBox = styled.input`
-  width: 24px;
-  height: 24px;
-  margin: 6px 10px 4px;
-  position: relative;
-  top: 20px;
-  cursor: pointer;
-`;
-
-const Img = styled.img`
-  height: 80px;
-  object-fit: cover;
-`;
-
-const ProductName = styled.p`
-  display: flex;
-  align-items: center;
-  margin: 10px 100px 10px 10px;
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-`;
-
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 4px;
-  width: fit-content;
-  height: 50px;
-  border: 1px solid gray;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
-`;
 
 export default AdminProductItem;
