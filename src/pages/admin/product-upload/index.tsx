@@ -164,15 +164,29 @@ const AdminUploadPage = () => {
             placeholder="내용을 입력해 주세요"
           />
           <button onClick={onClickAddOptionButton}>옵션추가</button>
-          <ul>
-            {optionList.map((option, index) => (
-              <OptionItem
-                key={`option-${index}`}
-                option={option}
-                onClickRemoveOption={onClickRemoveOption}
-              />
-            ))}
-          </ul>
+          {optionList.length ? (
+            <TableContainer>
+              <thead>
+                <tr>
+                  <TH>옵션명</TH>
+                  <TH>옵션가격</TH>
+                  <TH>옵션수량</TH>
+                  <TH>삭제</TH>
+                </tr>
+              </thead>
+              <tbody>
+                {optionList.map((option, index) => (
+                  <OptionItem
+                    key={`option-${index}`}
+                    option={option}
+                    onClickRemoveOption={onClickRemoveOption}
+                  />
+                ))}
+              </tbody>
+            </TableContainer>
+          ) : (
+            <p>해당 상품의 옵션이 없습니다.</p>
+          )}
         </StaticContainer>
       </section>
       {modalState && (
@@ -301,4 +315,17 @@ const SubmitButton = styled.button`
 
 const HR = styled.hr`
   width: 100%;
+`;
+
+const TableContainer = styled.table`
+  width: 100%;
+  border-top: 1px solid #444444;
+  border-collapse: collapse;
+  overflow-x: hidden;
+`;
+
+const TH = styled.th`
+  border-bottom: 1px solid #444444;
+  padding: 10px;
+  text-align: center;
 `;
