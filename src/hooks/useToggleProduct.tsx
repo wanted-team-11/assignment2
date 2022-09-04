@@ -33,6 +33,8 @@ const useToggleProduct = () => {
         setProductList(newList);
         setCheckList([]);
       }
+    } else {
+      alert("선택된 항목이 없습니다.");
     }
   };
 
@@ -56,10 +58,12 @@ const useToggleProduct = () => {
         setProductList(newList);
         setCheckList([]);
       }
+    } else {
+      alert("선택된 항목이 없습니다.");
     }
   };
 
-  const onAllBehind = () => {
+  const hideAllProduct = () => {
     if (window.confirm(`전체 숨김을 하시겠습니까?`)) {
       const newList = productList.map((data: Product) => {
         return { ...data, visible: false };
@@ -81,7 +85,7 @@ const useToggleProduct = () => {
     toggleProduct,
     hideCheckedProduct,
     showCheckedProduct,
-    onAllBehind,
+    hideAllProduct,
     showAllProduct,
   };
 };

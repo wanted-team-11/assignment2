@@ -1,51 +1,47 @@
-import { useEffect } from "react";
-import styled from "styled-components";
-import ProductItem from "../../../components/AdminProductItem";
+import AdminProductItem from "../../../components/AdminProductItem";
 import useRemoveProduct from "../../../hooks/useRemoveProduct";
 import useToggleProduct from "../../../hooks/useToggleProduct";
 import { Product } from "../../../types/types";
+import styled from "styled-components";
 
 const AdminProductListPage = () => {
   const {
     productList,
     checkList,
     setCheckList,
-    onRemove,
-    ChooseRemove,
-    onAllRemove,
+    removeOneProduct,
+    removeCheckedProduct,
+    removeAllProducts,
   } = useRemoveProduct();
 
   const {
     toggleProduct,
     hideCheckedProduct,
     showCheckedProduct,
-    onAllBehind,
+    hideAllProduct,
     showAllProduct,
   } = useToggleProduct();
 
-  useEffect(() => {
-    window.localStorage.setItem("product", JSON.stringify(productList));
-  }, [productList]);
-
   return (
     <Wrapper>
+      <Header>상품 목록 관리 페이지</Header>
       <PaddingButton>
-        <Button onClick={onAllBehind}>전체 숨김</Button>
+        <Button onClick={hideAllProduct}>전체 숨김</Button>
         <Button onClick={showAllProduct}>전체 노출</Button>
-        <Button onClick={onAllRemove}>전체 삭제</Button>
+        <Button onClick={removeAllProducts}>전체 삭제</Button>
       </PaddingButton>
       <PaddingButton>
         <Button onClick={hideCheckedProduct}>선택된 항목 숨김</Button>
         <Button onClick={showCheckedProduct}>선택된 항목 노출</Button>
-        <Button onClick={ChooseRemove}>선택된 항목 삭제</Button>
+        <Button onClick={removeCheckedProduct}>선택된 항목 삭제</Button>
       </PaddingButton>
       <ProductListContainer>
         {productList?.map((product: Product) => {
           return (
-            <ProductItem
+            <AdminProductItem
               key={product.id}
               product={product}
-              onRemove={onRemove}
+              removeOneProduct={removeOneProduct}
               toggleProduct={toggleProduct}
               checkList={checkList}
               setCheckList={setCheckList}
@@ -64,6 +60,11 @@ const Wrapper = styled.div`
   align-items: center;
   overflow: hidden;
   position: relative;
+`;
+
+const Header = styled.h1`
+  display: flex;
+  justify-content: center;
 `;
 
 const PaddingButton = styled.div`
