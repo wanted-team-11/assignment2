@@ -69,6 +69,7 @@ const Wrapper = styled.div`
 const PaddingButton = styled.div`
   display: flex;
   padding: 15px 0px 5px 27px;
+  margin: 0 22.5vw;
   gap: 10px;
 `;
 

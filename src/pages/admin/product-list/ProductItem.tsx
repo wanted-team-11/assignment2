@@ -91,9 +91,10 @@ const ProductItem = ({
 const Wrapper = styled.div`
   display: flex;
   position: relative;
-  width: 100vw;
+  width: 50vw;
+  min-width: 420px;
   height: 80px;
-  margin: 30px;
+  margin: 30px auto;
   border: 1px solid gray;
 `;
 
@@ -114,7 +115,7 @@ const Img = styled.img`
 const ProductName = styled.p`
   display: flex;
   align-items: center;
-  margin: 10px;
+  margin: 10px 100px 10px 10px;
 `;
 
 const Buttons = styled.div`
