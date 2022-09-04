@@ -1,5 +1,6 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import styled from "styled-components";
+import ThumbNail from "./components/ThumNail";
 import useInput from "./hooks/useInput";
 
 interface Option {
@@ -10,7 +11,7 @@ interface Option {
 
 const AdminUploadPage = () => {
   const dcPrice = useInput(0);
-  const originPrice = useInput(0);
+  const originPrice = useInput(10000);
   const deliveryFee = useInput(0);
   const freeShippingCondition = useInput(0);
 
@@ -46,33 +47,29 @@ const AdminUploadPage = () => {
             <h3>Pricing Info</h3>
             <label>원가</label>
             <input
-              type="number"
-              min={0}
-              value={originPrice.value}
+              type="currency"
+              value={originPrice.value.toLocaleString("KR", {
+                style: "currency",
+                currency: "KRW",
+              })}
               onChange={originPrice.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>할인가</label>
             <input
-              min={0}
-              type="number"
-              value={dcPrice.value}
+              type="currency"
               onChange={dcPrice.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>배송비</label>
             <input
-              min={0}
-              type="number"
-              value={deliveryFee.value}
+              type="currency"
               onChange={deliveryFee.onChange}
               placeholder="내용을 입력해주세요"
             />
             <label>무료배송조건비용</label>
             <input
-              min={0}
-              type="number"
-              value={freeShippingCondition.value}
+              type="currency"
               onChange={freeShippingCondition.onChange}
               placeholder="내용을 입력해주세요"
             />
@@ -111,12 +108,11 @@ const AdminUploadPage = () => {
           {imgUrlList.length ? (
             <ul>
               {imgUrlList.map((item, index) => (
-                <li
-                  key={`img-url-${index}`}
-                  onClick={() => onClickRemoveImg(item)}
-                >
-                  <img src={item} alt="thumbnail" width={100} height={100} />
-                </li>
+                <ThumbNail
+                  key={`imgUrl-${index}`}
+                  item={item}
+                  onClickRemoveImg={onClickRemoveImg}
+                />
               ))}
             </ul>
           ) : (
@@ -165,6 +161,7 @@ const PricingInofBox = styled.div`
   border: 1px solid #f0f0f0;
   border-radius: 3px;
 `;
+
 const StaticContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -210,6 +207,7 @@ const Container = styled.div`
     gap: 10px;
   }
 `;
+
 const Header = styled.div`
   width: inherit;
   display: flex;
@@ -236,6 +234,7 @@ const SubmitButton = styled.button`
   text-decoration: none;
   cursor: pointer;
 `;
+
 const HR = styled.hr`
   width: 100%;
 `;
