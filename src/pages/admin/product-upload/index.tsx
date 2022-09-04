@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
-import ThumbNail from "./components/ThumNail";
+import ThumbNail from "./components/ThumbNail";
 import Modal from "./components/Modal";
 import useInput from "./hooks/useInput";
 import OptionItem from "./components/OptionItem";
