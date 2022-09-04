@@ -18,7 +18,6 @@ function App() {
         <GNB />
         <Routes>
           <Route path="/" element={<Navigate to="/fruitstore" />} />
-          <Route path="/fruitstore/:id" element={<FruitStorePage />} />
           <Route path="/fruitstore/" element={<FruitStorePage />} />
           <Route path="product-detail/:id" element={<ProductDetailPage />} />
           <Route path="order" element={<OrderPage />} />
