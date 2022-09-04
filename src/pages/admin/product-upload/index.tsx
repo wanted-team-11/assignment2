@@ -21,6 +21,10 @@ const AdminUploadPage = () => {
   const description = useInput("");
   const productName = useInput("");
 
+  const stockCount = useInput(0);
+  const optionName = useInput("");
+  const optionPrice = useInput(0);
+
   const [visible, setVisible] = useState<boolean>(true);
   const [modalState, setModalState] = useState<boolean>(false);
 
@@ -40,11 +44,24 @@ const AdminUploadPage = () => {
 
   const onClickAddOptionButton = () => {
     setModalState(true);
-  }
+  };
 
-  const onClickRemoveOption = (option:Option)=>{
-    setOptionList(prev=>prev.filter(item=>item.name!==option.name))
-  }
+  const onClickAddOption = () => {
+    const newOption = {
+      stockCount: stockCount.value,
+      name: optionName.value,
+      price: optionPrice.value,
+    };
+    setOptionList((prev) => [...prev, newOption]);
+    setModalState(false);
+    stockCount.resetValue();
+    optionName.resetValue();
+    optionPrice.resetValue();
+  };
+
+  const onClickRemoveOption = (option: Option) => {
+    setOptionList((prev) => prev.filter((item) => item.name !== option.name));
+  };
 
   return (
     <Container>
@@ -55,7 +72,7 @@ const AdminUploadPage = () => {
       <HR />
       <section>
         <StickyContainer>
-          <PricingInofBox>
+          <PricingInfoBox>
             <h3>Pricing Info</h3>
             <label>원가</label>
             <input
@@ -85,8 +102,8 @@ const AdminUploadPage = () => {
               onChange={freeShippingCondition.onChange}
               placeholder="내용을 입력해주세요"
             />
-          </PricingInofBox>
-          <PricingInofBox>
+          </PricingInfoBox>
+          <PricingInfoBox>
             <h3>Visibility Status</h3>
             <label>
               <input
@@ -96,7 +113,7 @@ const AdminUploadPage = () => {
               />
               visible
             </label>
-          </PricingInofBox>
+          </PricingInfoBox>
         </StickyContainer>
         <StaticContainer>
           <h3>Basic Information</h3>
@@ -146,24 +163,53 @@ const AdminUploadPage = () => {
             placeholder="내용을 입력해 주세요"
           />
           <button onClick={onClickAddOptionButton}>옵션추가</button>
-          {modalState&& <Modal setModalState={setModalState}>text</Modal>}
           <ul>
             {optionList.map((option, index) => (
               <li key={`option-${index}`}>
-                <p>옵션: {option.name}</p>
-                <p>가격: {option.price}원</p>
-                <p>수량: {option.stockCount}</p>
+                {option.name} | {option.price}원 |{option.stockCount}개
+                <button onClick={() => onClickRemoveOption(option)}>X</button>
               </li>
             ))}
           </ul>
         </StaticContainer>
       </section>
+      {modalState && (
+        <Modal setModalState={setModalState}>
+          <h3>옵션추가</h3>
+          <label>옵션이름</label>
+          <input
+            type="text"
+            value={optionName.value}
+            onChange={optionName.onChange}
+            placeholder="내용을 입력해 주세요"
+          />
+          <label>옵션가격</label>
+          <input
+            type="currency"
+            value={optionPrice.value.toLocaleString("KR", {
+              style: "currency",
+              currency: "KRW",
+            })}
+            onChange={optionPrice.onChange}
+            placeholder="내용을 입력해주세요"
+          />
+          <label>옵션개수</label>
+          <input
+            type="number"
+            min="1"
+            value={stockCount.value}
+            onChange={stockCount.onChange}
+            placeholder="내용을 입력해 주세요"
+          />
+          <SubmitButton onClick={onClickAddOption}>추가</SubmitButton>
+        </Modal>
+      )}
     </Container>
   );
 };
 export default AdminUploadPage;
 
-const PricingInofBox = styled.div`
+const PricingInfoBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
