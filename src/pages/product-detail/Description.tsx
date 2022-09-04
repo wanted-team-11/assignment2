@@ -127,12 +127,6 @@ const Description = ({
   };
 
   const purchase = () => {
-    // addCart
-    // type Item = {
-    //   quantity: number;
-    //   name: string;
-    //   price: number;
-    // };
     const selectedProducts = addCart.map((addedItem) => {
       const { name, stockCount, price, quantity } = addedItem;
       return {
