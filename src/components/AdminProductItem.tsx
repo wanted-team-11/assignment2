@@ -4,13 +4,13 @@ import * as S from "./styles/AdminProductItem.styled";
 
 const AdminProductItem = ({
   product,
-  onRemove,
+  removeOneProduct,
   toggleProduct,
   checkList,
   setCheckList,
 }: {
   product: Product;
-  onRemove: (id: number) => void;
+  removeOneProduct: (id: number) => void;
   toggleProduct: (id: number) => void;
   checkList: number[];
   setCheckList: Dispatch<SetStateAction<number[]>>;
@@ -77,7 +77,7 @@ const AdminProductItem = ({
         <S.Button
           onClick={() => {
             if (window.confirm(`${name}를 삭제하시겠습니까?`)) {
-              onRemove(id);
+              removeOneProduct(id);
             }
           }}
         >

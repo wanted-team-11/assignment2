@@ -63,7 +63,7 @@ const useToggleProduct = () => {
     }
   };
 
-  const onAllBehind = () => {
+  const hideAllProduct = () => {
     if (window.confirm(`전체 숨김을 하시겠습니까?`)) {
       const newList = productList.map((data: Product) => {
         return { ...data, visible: false };
@@ -85,7 +85,7 @@ const useToggleProduct = () => {
     toggleProduct,
     hideCheckedProduct,
     showCheckedProduct,
-    onAllBehind,
+    hideAllProduct,
     showAllProduct,
   };
 };

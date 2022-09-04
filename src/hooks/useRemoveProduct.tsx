@@ -7,14 +7,14 @@ const useRemoveProduct = () => {
   const [productList, setProductList] = useRecoilState(productListState);
   const [checkList, setCheckList] = useRecoilState(checkListState);
 
-  const onRemove = (id: number) => {
+  const removeOneProduct = (id: number) => {
     const newList = productList.filter((data: Product) => {
       return data.id !== id;
     });
     setProductList(newList);
   };
 
-  const ChooseRemove = () => {
+  const removeCheckedProduct = () => {
     if (checkList.length > 0) {
       if (window.confirm(`선택된 ${checkList.length}개를 삭제하시겠습니까?`)) {
         const newList = productList.filter((data: Product) => {
@@ -28,7 +28,7 @@ const useRemoveProduct = () => {
     }
   };
 
-  const onAllRemove = () => {
+  const removeAllProducts = () => {
     if (window.confirm(`전체 삭제를 하시겠습니까?`)) {
       setProductList([]);
     }
@@ -49,9 +49,9 @@ const useRemoveProduct = () => {
     setProductList,
     checkList,
     setCheckList,
-    onRemove,
-    ChooseRemove,
-    onAllRemove,
+    removeOneProduct,
+    removeCheckedProduct,
+    removeAllProducts,
   };
 };
 
