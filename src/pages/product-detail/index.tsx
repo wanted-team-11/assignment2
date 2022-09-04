@@ -33,7 +33,7 @@ const ProductDetailPage = () => {
               return params.id === item.id.toString() ? (
                 <Description
                   key={item.id}
-                  id={item.id % 5 + 1}
+                  id={(item.id % 5) + 1}
                   name={item.name}
                   originalPrice={item.originalPrice}
                   dcPrice={item.dcPrice}
