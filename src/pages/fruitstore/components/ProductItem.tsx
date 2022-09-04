@@ -1,10 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import * as S from "./styles/ProductItem.styled";
 import { useRecoilValue } from "recoil";
 import { productListAtom } from "../store/product.store";
 import { Product } from "../../order/types";
 
 const ProductItem = () => {
+  const navigate = useNavigate();
   const products: Product[] = useRecoilValue(productListAtom);
+
+  const goToDetail = (id: number) => {
+    navigate(`/product-detail/${id}`);
+  };
 
   return (
     <S.ProductsListWrapper>
@@ -19,18 +25,24 @@ const ProductItem = () => {
             .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 
           return (
-            <div>
-              <S.ProductThumbnailWrapper key={idx}>
-                <S.ProductThumbnail src={el.imageUrls[0]} alt="" />
-              </S.ProductThumbnailWrapper>
-              <S.ProductDescriptionWrapper>
-                <S.ProductName>{el.name}</S.ProductName>
-              </S.ProductDescriptionWrapper>
+            <S.ItemsWrapper key={idx}>
+              <div
+                onClick={() => {
+                  goToDetail(el.id);
+                }}
+              >
+                <S.ProductThumbnailWrapper>
+                  <S.ProductThumbnail src={el.imageUrls[0]} alt={el.name} />
+                </S.ProductThumbnailWrapper>
+                <S.ProductDescriptionWrapper>
+                  <S.ProductName>{el.name}</S.ProductName>
+                </S.ProductDescriptionWrapper>
+              </div>
               <S.PriceInfoWrapper>
                 <S.DcPrice>{dcPriceWithRegex}원</S.DcPrice>
                 <S.OriginalPrice>{origianlPriceWithRegex}원</S.OriginalPrice>
               </S.PriceInfoWrapper>
-            </div>
+            </S.ItemsWrapper>
           );
         })}
       </S.ProductsListContainer>

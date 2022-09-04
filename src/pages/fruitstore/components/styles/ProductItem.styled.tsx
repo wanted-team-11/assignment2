@@ -19,14 +19,19 @@ export const ProductThumbnailWrapper = styled.div`
   height: 244px;
 `;
 
+export const ItemsWrapper = styled.div``;
+
 export const ProductThumbnail = styled.img`
   width: inherit;
   height: inherit;
+  cursor: pointer;
 `;
 
 export const ProductDescriptionWrapper = styled.div``;
 
-export const ProductName = styled.p``;
+export const ProductName = styled.p`
+  cursor: pointer;
+`;
 
 export const PriceInfoWrapper = styled.div``;
 
