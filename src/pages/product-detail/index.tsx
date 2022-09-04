@@ -36,7 +36,10 @@ const ProductDetailPage = () => {
               <DescriptionMDTag>MD</DescriptionMDTag>
               <DescriptionWatingTag>판매대기</DescriptionWatingTag>
             </DescriptionTitle>
-            <ProductPrice>30000</ProductPrice>
+            <PriceContainer>
+              <ProductPrice>30000원</ProductPrice>
+              <ProductSalePrice>29000원</ProductSalePrice>
+            </PriceContainer>
           </ProductDescriptionContainer>
         </ProductContainer>
         <ProductDetailContainer>
@@ -92,6 +95,7 @@ const ProductSubImg = styled.div`
 
 const ProductDescriptionContainer = styled.div`
   margin: 0 0 30px 50px;
+
   border: 1px solid black;
   width: 700px;
   height: 615px;
@@ -99,7 +103,7 @@ const ProductDescriptionContainer = styled.div`
 
 const DescriptionTitle = styled.div`
   display: flex;
-  padding-bottom: 30px;
+
   align-items: center;
   font-size: 25px;
 `;
@@ -134,10 +138,20 @@ const ProductDetailContainer = styled.div`
   display: flex;
   margin-top: 40px;
 `;
-
+const PriceContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
 const ProductPrice = styled.div`
+  margin-right: 10px;
   font-size: 30px;
   color: #80a72e;
+`;
+
+const ProductSalePrice = styled.div`
+  font-size: 20px;
+  text-decoration: line-through;
+  color: gray;
 `;
 const Detail = styled.div`
   display: flex;
