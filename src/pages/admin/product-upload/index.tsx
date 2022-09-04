@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 import ThumbNail from "./components/ThumNail";
 import Modal from "./components/Modal";
@@ -233,12 +233,15 @@ const StaticContainer = styled.div`
   border-radius: 3px;
   gap: 10px;
   padding: 10px;
+
   ul {
     display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-    gap: 4px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: auto;
+
     li {
+      margin: 5px;
       list-style: none;
     }
   }
