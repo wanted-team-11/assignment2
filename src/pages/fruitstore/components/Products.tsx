@@ -1,14 +1,12 @@
-import { useState, useCallback } from "react";
-import { useRecoilValue } from "recoil";
+import { useCallback } from "react";
+import { useRecoilState } from "recoil";
 import ProductItem from "./ProductItem";
 import * as S from "./styles/Products.styled";
 import { productListAtom } from "../store/product.store";
 import PageButton from "./PageButton";
-import { Product } from "../../order/types";
 
 const Products = () => {
-  const products = useRecoilValue(productListAtom);
-  const [pageData, setPageData] = useState<Product[]>([]);
+  const [products, setProducts] = useRecoilState(productListAtom);
 
   const getNextData = useCallback(async (buttonIndex: number) => {
     const limit = 10;
@@ -18,8 +16,9 @@ const Products = () => {
     await fetch(`/mockup-data/${queryString}.json`)
       .then((res) => res.json())
       .then((data) => {
-        setPageData(data);
+        setProducts(data);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -27,7 +26,7 @@ const Products = () => {
       <S.ProductsCounterWrapper>
         FRUIITE STORE <S.ProductsCounts>{products.length}</S.ProductsCounts>
       </S.ProductsCounterWrapper>
-      <ProductItem pageData={pageData} />
+      <ProductItem />
       <PageButton getNextData={getNextData} />
     </>
   );

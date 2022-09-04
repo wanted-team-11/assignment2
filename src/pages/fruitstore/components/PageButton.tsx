@@ -1,7 +1,4 @@
-import React from "react";
 import * as S from "./styles/PageButton.styled";
-import { useRecoilValue } from "recoil";
-import { productListAtom } from "../store/product.store";
 
 const PageButton = ({
   getNextData,

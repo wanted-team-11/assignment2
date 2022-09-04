@@ -2,11 +2,10 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./styles/ProductItem.styled";
 import { useRecoilValue } from "recoil";
 import { productListAtom } from "../store/product.store";
-import { Product } from "../../order/types";
 
-const ProductItem = ({ pageData }: { pageData: Product[] }) => {
+const ProductItem = () => {
   const navigate = useNavigate();
-  const products: Product[] = useRecoilValue(productListAtom);
+  const products = useRecoilValue(productListAtom);
 
   const goToDetail = (id: number) => {
     navigate(`/product-detail/${id}`);
@@ -15,7 +14,7 @@ const ProductItem = ({ pageData }: { pageData: Product[] }) => {
   return (
     <S.ProductsListWrapper>
       <S.ProductsListContainer>
-        {pageData.map((el, idx) => {
+        {products.map((el, idx) => {
           const origianlPriceWithRegex = el.originalPrice
             .toString()
             .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
