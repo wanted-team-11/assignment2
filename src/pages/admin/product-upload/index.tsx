@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import styled from "styled-components";
 import ThumbNail from "./components/ThumNail";
+import Modal from "./components/Modal";
 import useInput from "./hooks/useInput";
 
 interface Option {
@@ -21,6 +22,8 @@ const AdminUploadPage = () => {
   const productName = useInput("");
 
   const [visible, setVisible] = useState<boolean>(true);
+  const [modalState, setModalState] = useState<boolean>(false);
+
   const [imgUrlList, setImgUrlList] = useState<string[]>([]);
   const [optionList, setOptionList] = useState<Option[]>([]);
 
@@ -34,6 +37,15 @@ const AdminUploadPage = () => {
   const onClickRemoveImg = (url: string) => {
     setImgUrlList((prev) => prev.filter((item) => item !== url));
   };
+
+  const onClickAddOptionButton = () => {
+    setModalState(true);
+  }
+
+  const onClickRemoveOption = (option:Option)=>{
+    setOptionList(prev=>prev.filter(item=>item.name!==option.name))
+  }
+
   return (
     <Container>
       <Header>
@@ -133,7 +145,8 @@ const AdminUploadPage = () => {
             onChange={description.onChange}
             placeholder="내용을 입력해 주세요"
           />
-          <button>옵션추가</button>
+          <button onClick={onClickAddOptionButton}>옵션추가</button>
+          {modalState&& <Modal setModalState={setModalState}>text</Modal>}
           <ul>
             {optionList.map((option, index) => (
               <li key={`option-${index}`}>
