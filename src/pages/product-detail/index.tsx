@@ -1,20 +1,15 @@
-import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import * as S from "./style/product-detail.style";
 import ImageContainer from "./ImageContainer";
 import { productListAtom } from "../fruitstore/store/product.store";
 import { useParams } from "react-router-dom";
-import { Product, Tag } from "../order/types";
+import { Product } from "../order/types";
 import Description from "./Description";
 
 const ProductDetailPage = () => {
   const params = useParams();
-  const [dropDown, setDropDown] = useState(false);
-  const productData: Product[] = useRecoilValue(productListAtom);
+  const productData = useRecoilValue(productListAtom);
 
-  const usingDropDown = () => {
-    setDropDown(!dropDown);
-  };
   return (
     <>
       <S.Container>
@@ -27,17 +22,6 @@ const ProductDetailPage = () => {
                 key={item.id}
                 id={item.id}
                 imageUrls={item.imageUrls}
-                name={item.name}
-                originalPrice={item.originalPrice}
-                dcPrice={item.dcPrice}
-                deliveryFee={item.deliveryFee}
-                freeShippingCondition={item.freeShippingCondition}
-                likeCount={item.likeCount}
-                location={item.location}
-                description={item.description}
-                options={item.options}
-                tags={item.tags}
-                visible={item.visible}
               />
             ) : (
               ""
@@ -49,7 +33,6 @@ const ProductDetailPage = () => {
                 <Description
                   key={item.id}
                   id={item.id}
-                  imageUrls={item.imageUrls}
                   name={item.name}
                   originalPrice={item.originalPrice}
                   dcPrice={item.dcPrice}
@@ -58,8 +41,8 @@ const ProductDetailPage = () => {
                   likeCount={item.likeCount}
                   location={item.location}
                   description={item.description}
-                  options={item.options}
                   tags={item.tags}
+                  options={item.options}
                   visible={item.visible}
                 />
               ) : (

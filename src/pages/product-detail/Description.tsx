@@ -6,6 +6,7 @@ import {
   faChevronUp,
   faChevronDown,
   faX,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { productListAtom } from "../fruitstore/store/product.store";
@@ -20,9 +21,38 @@ type Options = {
   price: number;
 };
 
-const Description = (props: Product) => {
-  const productData: Product[] = useRecoilValue(productListAtom);
+type DescriptionProps = {
+  id: number;
+  name: string;
+  originalPrice: number;
+  dcPrice: number;
+  deliveryFee: number;
+  options: Options[];
+  tags: string[];
+  freeShippingCondition: number;
+  likeCount: number;
+  location: string;
+  visible: boolean;
+  description: string;
+};
+
+const Description = ({
+  id,
+  name,
+  originalPrice,
+  dcPrice,
+  deliveryFee,
+  options,
+  freeShippingCondition,
+  likeCount,
+  location,
+  description,
+  visible,
+  tags,
+}: DescriptionProps) => {
+  const productData = useRecoilValue(productListAtom);
   const [dropDown, setDropDown] = useState(false);
+  const [except, setExcept] = useState(false);
   const [addCart, setAddCart] = useState<Options>();
   const [optionPrice, setOptionPrice] = useState({});
   const [quantity, setQuantity] = useRecoilState(quantityAtom);
@@ -33,38 +63,45 @@ const Description = (props: Product) => {
     setDropDown(!dropDown);
   };
 
+  const addToCart = () => {};
+  const onClickExcept = () => {
+    setExcept(!except);
+  };
+
   const plusQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
-
   const minusQuantity = () => {
     setQuantity((prev) => prev - 1);
   };
 
+  const makeComma = (price: number) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
   const changeQuantity = () => {};
   return (
     <>
-      <S.DescriptionTitle>{props.name}</S.DescriptionTitle>
+      <S.DescriptionTitle>{name}</S.DescriptionTitle>
       <S.TagContainer>
-        <S.DescriptionSaleTag>SALE</S.DescriptionSaleTag>
-        <S.DescriptionBestTag>BEST</S.DescriptionBestTag>
-        <S.DescriptionMDTag>MD</S.DescriptionMDTag>
-        <S.DescriptionWatingTag>판매대기</S.DescriptionWatingTag>
+        {tags.map((el) => {
+          return <S.ItemTag type={el}>{el}</S.ItemTag>;
+        })}
       </S.TagContainer>
+
       <S.PriceContainer>
-        <S.ProductPrice>{props.originalPrice}원</S.ProductPrice>
-        <S.ProductSalePrice>{props.dcPrice}원</S.ProductSalePrice>
+        <S.ProductPrice>{makeComma(originalPrice)}원</S.ProductPrice>
+        <S.ProductSalePrice>{makeComma(dcPrice)}원</S.ProductSalePrice>
       </S.PriceContainer>
-      <S.ProductDescription>{props.description}</S.ProductDescription>
+      <S.ProductDescription>{description}</S.ProductDescription>
       <S.ProductLocationContainer>
         <S.ProductLocation>
-          원산지 <S.ProductData>{props.location}</S.ProductData>
+          원산지 <S.ProductData>{location}</S.ProductData>
         </S.ProductLocation>
         <S.HowToDelivery>
           배송방법 <S.ProductData>택배</S.ProductData>
         </S.HowToDelivery>
         <S.DeliveryFee>
-          배송비 <S.ProductData>{props.deliveryFee}원</S.ProductData>
+          배송비 <S.ProductData>{makeComma(deliveryFee)}원</S.ProductData>
         </S.DeliveryFee>
         <S.ChoiceTitle>필수선택 *</S.ChoiceTitle>
         <S.ChoiceOptionBox onClick={usingDropDown}>
@@ -76,7 +113,7 @@ const Description = (props: Product) => {
           )}
         </S.ChoiceOptionBox>
         {dropDown
-          ? props.options.map((option: Options) => {
+          ? options.map((option: Options) => {
               const addToCart = () => {
                 setAddCart(option);
               };
@@ -87,39 +124,50 @@ const Description = (props: Product) => {
                   }}
                 >
                   <S.OptionName>{option.name}</S.OptionName>
-                  <S.OptionPrice>{option.price}원</S.OptionPrice>
+                  <S.OptionPrice>{makeComma(option.price)}원</S.OptionPrice>
                 </S.Option>
               );
             })
           : ""}
-        {props.options.map((option) => {
-          return (
-            <S.SelectInfo>
-              <S.SelectTitle>
-                {option.name}
-                <S.OptionCloseButton>
-                  <FontAwesomeIcon icon={faX} />
-                </S.OptionCloseButton>
-              </S.SelectTitle>
-              <S.SelectQuantity>
-                <S.QuantityContainer>
-                  <S.QuantityMinusButton onClick={minusQuantity}>
-                    -
-                  </S.QuantityMinusButton>
-                  <S.Quantity>{quantity}</S.Quantity>
-                  <S.QuantityPlusButton onClick={plusQuantity}>
-                    +
-                  </S.QuantityPlusButton>
-                </S.QuantityContainer>
-                <S.TotalPrice>{props.dcPrice * quantity}원</S.TotalPrice>
-              </S.SelectQuantity>
-            </S.SelectInfo>
-          );
-        })}
+        {except
+          ? options.map((option) => {
+              return (
+                <S.SelectInfo>
+                  <S.SelectTitle>
+                    {option.name}
+                    <S.OptionCloseButton onClick={onClickExcept}>
+                      <FontAwesomeIcon icon={faX} />
+                    </S.OptionCloseButton>
+                  </S.SelectTitle>
+                  <S.SelectQuantity>
+                    <S.QuantityContainer>
+                      <S.QuantityMinusButton onClick={minusQuantity}>
+                        -
+                      </S.QuantityMinusButton>
+                      <S.Quantity>{quantity}</S.Quantity>
+                      <S.QuantityPlusButton onClick={plusQuantity}>
+                        +
+                      </S.QuantityPlusButton>
+                    </S.QuantityContainer>
+                    <S.TotalPrice>
+                      {makeComma(dcPrice * quantity)}원
+                    </S.TotalPrice>
+                  </S.SelectQuantity>
+                </S.SelectInfo>
+              );
+            })
+          : ""}
         <S.TotalPriceContainer>
-          <S.TotalPriceCounter>총 상품금액({quantity})개</S.TotalPriceCounter>
+          <S.TotalPriceCounter>총 상품금액 ({quantity})개</S.TotalPriceCounter>
           <S.LastTotalPrice>10000원</S.LastTotalPrice>
         </S.TotalPriceContainer>
+        <S.ButtonContainer>
+          <S.PurchaseButton>구매하기</S.PurchaseButton>
+          <S.CartButton>장바구니</S.CartButton>
+          <S.LikeButton>
+            <FontAwesomeIcon icon={faHeart} /> {likeCount}
+          </S.LikeButton>
+        </S.ButtonContainer>
       </S.ProductLocationContainer>
     </>
   );

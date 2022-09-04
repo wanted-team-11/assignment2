@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const Container = styled.div`
@@ -58,32 +58,50 @@ export const TagContainer = styled.div`
   margin: 20px 10px 10px 0;
 `;
 
-export const DescriptionSaleTag = styled.div`
+type ItemTagProps = { type: "BEST" | "SALE" | "SOLDOUT" | "판매대기" | string };
+
+export const ItemTag = styled.span<ItemTagProps>`
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 45px;
   height: 25px;
-  background-color: red;
-  color: white;
   font-size: 13px;
-  margin-left: 7px;
+  margin-top: 20px;
+  margin-right: 10px;
+  border: 1px solid #cccccc;
+
+  ${({ type }) =>
+    type === "BEST" &&
+    css`
+      background-color: #ffffff;
+      color: #fe5355;
+      border-color: #cccccc;
+    `}
+
+  ${({ type }) =>
+    type === "SALE" &&
+    css`
+      background-color: #fe5355;
+      color: #ffffff;
+      border-color: #fe5355;
+    `}
+
+    ${({ type }) =>
+    type === "SOLDOUT" &&
+    css`
+      width: 70px;
+      background-color: #666666;
+      color: #ffffff;
+    `}
+
+  ${({ type }) =>
+    type === "판매대기" &&
+    css`
+      width: 60px;
+    `}
 `;
 
-export const DescriptionBestTag = styled(DescriptionSaleTag)`
-  background-color: white;
-  color: red;
-  border: 1px solid gray;
-`;
-
-export const DescriptionMDTag = styled(DescriptionBestTag)`
-  color: black;
-`;
-
-export const DescriptionWatingTag = styled(DescriptionBestTag)`
-  width: 60px;
-  color: black;
-`;
 export const ProductDetailContainer = styled.div`
   display: flex;
 
@@ -231,15 +249,18 @@ export const TotalPrice = styled.div`
 export const TotalPriceContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 440px;
   margin-top: 20px;
 `;
 
 export const TotalPriceCounter = styled.div`
   font-size: 20px;
+  color: gray;
 `;
 
 export const LastTotalPrice = styled.div`
   font-size: 20px;
+  color: black;
 `;
 export const Detail = styled.div`
   display: flex;
@@ -253,3 +274,24 @@ export const Detail = styled.div`
     background-color: #f2f0ed;
   }
 `;
+
+export const ButtonContainer = styled.div`
+  margin-top: 30px;
+`;
+
+export const PurchaseButton = styled.button`
+  width: 150px;
+  height: 40px;
+  border-radius: 30px;
+  margin-right: 10px;
+  background-color: #4c9c2e;
+  color: white;
+  border: none;
+  cursor: pointer;
+`;
+export const CartButton = styled(PurchaseButton)`
+  background-color: white;
+  color: black;
+  border: 0.5px solid black;
+`;
+export const LikeButton = styled(CartButton)``;
