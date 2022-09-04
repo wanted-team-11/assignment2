@@ -12,6 +12,7 @@ export const Wrapper = styled.div`
 
 export const CheckBox = styled.input`
   width: 24px;
+  min-width: 24px;
   height: 24px;
   margin: 6px 10px 4px;
   position: relative;
