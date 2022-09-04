@@ -206,6 +206,7 @@ export const SelectInfo = styled.div`
 export const OptionCloseButton = styled.button`
   font-size: 20px;
   border: none;
+  cursor: pointer;
 `;
 export const SelectTitle = styled.div`
   display: flex;

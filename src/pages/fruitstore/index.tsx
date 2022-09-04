@@ -10,7 +10,7 @@ const FruitStorePage = () => {
 
   useEffect(() => {
     try {
-      fetch("/mockup-data/products.json")
+      fetch("/mockup-data/limit=10&offset=0.json")
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);

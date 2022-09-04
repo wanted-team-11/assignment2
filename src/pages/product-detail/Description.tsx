@@ -1,7 +1,6 @@
 import * as S from "./style/product-detail.style";
 import React from "react";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useState } from "react";
 import {
   faChevronUp,
   faChevronDown,
@@ -9,9 +8,6 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { productListAtom } from "../fruitstore/store/product.store";
-import { Product, Tag } from "../order/types";
-import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { quantityAtom } from "./store/price.store";
 
@@ -50,35 +46,44 @@ const Description = ({
   visible,
   tags,
 }: DescriptionProps) => {
-  const productData = useRecoilValue(productListAtom);
   const [dropDown, setDropDown] = useState(false);
   const [except, setExcept] = useState(false);
-  const [addCart, setAddCart] = useState<Options>();
+  const [addCart, setAddCart] = useState<Options[]>([]);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [optionPrice, setOptionPrice] = useState({});
   const [quantity, setQuantity] = useRecoilState(quantityAtom);
-  const params = useParams();
+  const [values, setValues] = useState({});
 
-  console.log(quantity);
   const usingDropDown = () => {
     setDropDown(!dropDown);
   };
 
-  const addToCart = () => {};
+  const addToCart = (option: Options) => {
+    addCart.push(option);
+    console.log(addCart);
+  };
   const onClickExcept = () => {
     setExcept(!except);
   };
 
+  console.log(quantity);
+
   const plusQuantity = () => {
-    setQuantity((prev) => prev + 1);
+    if (quantity > 0) {
+      setIsDisabled(false);
+      return setQuantity(quantity + 1);
+    }
   };
   const minusQuantity = () => {
-    setQuantity((prev) => prev - 1);
+    if (quantity === 1) {
+      setIsDisabled(true);
+      return setQuantity(quantity - 1);
+    }
   };
 
   const makeComma = (price: number) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  const changeQuantity = () => {};
   return (
     <>
       <S.DescriptionTitle>{name}</S.DescriptionTitle>
@@ -112,51 +117,49 @@ const Description = ({
             <FontAwesomeIcon icon={faChevronUp} />
           )}
         </S.ChoiceOptionBox>
-        {dropDown
-          ? options.map((option: Options) => {
-              const addToCart = () => {
-                setAddCart(option);
-              };
-              return (
-                <S.Option
-                  onClick={() => {
-                    addToCart();
-                  }}
-                >
-                  <S.OptionName>{option.name}</S.OptionName>
-                  <S.OptionPrice>{makeComma(option.price)}원</S.OptionPrice>
-                </S.Option>
-              );
-            })
-          : ""}
-        {except
-          ? options.map((option) => {
-              return (
-                <S.SelectInfo>
-                  <S.SelectTitle>
-                    {option.name}
-                    <S.OptionCloseButton onClick={onClickExcept}>
-                      <FontAwesomeIcon icon={faX} />
-                    </S.OptionCloseButton>
-                  </S.SelectTitle>
-                  <S.SelectQuantity>
-                    <S.QuantityContainer>
-                      <S.QuantityMinusButton onClick={minusQuantity}>
-                        -
-                      </S.QuantityMinusButton>
-                      <S.Quantity>{quantity}</S.Quantity>
-                      <S.QuantityPlusButton onClick={plusQuantity}>
-                        +
-                      </S.QuantityPlusButton>
-                    </S.QuantityContainer>
-                    <S.TotalPrice>
-                      {makeComma(dcPrice * quantity)}원
-                    </S.TotalPrice>
-                  </S.SelectQuantity>
-                </S.SelectInfo>
-              );
-            })
-          : ""}
+        {dropDown &&
+          options.map((option: Options) => {
+            return (
+              <S.Option
+                onClick={() => {
+                  addToCart(option);
+                }}
+              >
+                <S.OptionName>{option.name}</S.OptionName>
+                <S.OptionPrice>{makeComma(option.price)}원</S.OptionPrice>
+              </S.Option>
+            );
+          })}
+
+        {!except &&
+          options.map((option) => {
+            return (
+              <S.SelectInfo>
+                <S.SelectTitle>
+                  {option.name}
+                  <S.OptionCloseButton onClick={onClickExcept}>
+                    <FontAwesomeIcon icon={faX} />
+                  </S.OptionCloseButton>
+                </S.SelectTitle>
+                <S.SelectQuantity>
+                  <S.QuantityContainer>
+                    <S.QuantityMinusButton
+                      onClick={minusQuantity}
+                      disabled={isDisabled}
+                    >
+                      -
+                    </S.QuantityMinusButton>
+                    <S.Quantity>{quantity}</S.Quantity>
+                    <S.QuantityPlusButton onClick={plusQuantity}>
+                      +
+                    </S.QuantityPlusButton>
+                  </S.QuantityContainer>
+                  <S.TotalPrice>{makeComma(dcPrice * quantity)}원</S.TotalPrice>
+                </S.SelectQuantity>
+              </S.SelectInfo>
+            );
+          })}
+
         <S.TotalPriceContainer>
           <S.TotalPriceCounter>총 상품금액 ({quantity})개</S.TotalPriceCounter>
           <S.LastTotalPrice>10000원</S.LastTotalPrice>
