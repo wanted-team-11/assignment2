@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import ProductItem from "../../../components/AdminProductItem";
 import useRemoveProduct from "../../../hooks/useRemoveProduct";
 import useToggleProduct from "../../../hooks/useToggleProduct";
@@ -22,10 +21,6 @@ const AdminProductListPage = () => {
     onAllBehind,
     showAllProduct,
   } = useToggleProduct();
-
-  useEffect(() => {
-    window.localStorage.setItem("product", JSON.stringify(productList));
-  }, [productList]);
 
   return (
     <S.Wrapper>
