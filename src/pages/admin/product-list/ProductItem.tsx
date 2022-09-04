@@ -1,60 +1,83 @@
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
-
-type Option = {
-  stockCount: number;
-  name: string;
-  price: number;
-};
-
-type Tag = "SALE" | "BEST" | "MD" | "SOLDOUT" | "판매대기";
-
-type Product = {
-  id: number;
-  imageUrls: string[];
-  name: string;
-  tags: Tag[];
-  dcPrice: number;
-  originalPrice: number;
-  description: string;
-  likeCount: number;
-  options: Option[];
-  location: string;
-  deliveryFee: number;
-  freeShippingCondition: number;
-  visible: boolean;
-};
+import { Product } from "./types/types";
 
 const ProductItem = ({
   product,
   onRemove,
-  onBehind,
+  toggleProduct,
+  checkList,
+  setCheckList,
 }: {
   product: Product;
   onRemove: (id: number) => void;
-  onBehind: (id: number) => void;
+  toggleProduct: (id: number) => void;
+  checkList: number[];
+  setCheckList: Dispatch<SetStateAction<number[]>>;
 }) => {
-  const { imageUrls, name } = product;
+  const { imageUrls, name, visible, id } = product;
+
   const img = imageUrls[0];
+  const [visibleText, setVisibleText] = useState<string | undefined>(undefined);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckList = (id: number) => {
+    if (checkList.includes(id)) {
+      const newCheckList = checkList.filter((checkedId) => {
+        return checkedId !== id;
+      });
+      setCheckList(newCheckList);
+      setIsChecked(!isChecked);
+    } else {
+      setCheckList([...checkList, id]);
+      setIsChecked(!isChecked);
+    }
+  };
+
+  useEffect(() => {
+    if (visible === false) {
+      setVisibleText("노출");
+    } else {
+      setVisibleText("숨김");
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    if (checkList.includes(id)) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, [checkList]);
 
   return (
     <Wrapper>
-      <CheckBox type="checkbox" />
+      <CheckBox
+        type="checkbox"
+        checked={isChecked}
+        onChange={() => handleCheckList(id)}
+      />
       <Img src={img} alt="상품 이미지" />
       <ProductName>{name}</ProductName>
       <Buttons>
         <Button
           onClick={() => {
-            if (window.confirm(`${product.name}를 숨기시겠습니까?`)) {
-              onBehind(product.id);
+            if (visible && window.confirm(`${name}를 숨기시겠습니까?`)) {
+              toggleProduct(id);
+            } else if (
+              !visible &&
+              window.confirm(`${name}를 노출시키시겠습니까?`)
+            ) {
+              toggleProduct(id);
             }
           }}
         >
-          숨김
+          {visibleText}
         </Button>
         <Button
           onClick={() => {
-            if (window.confirm(`${product.name}를 삭제하시겠습니까?`)) {
-              onRemove(product.id);
+            if (window.confirm(`${name}를 삭제하시겠습니까?`)) {
+              onRemove(id);
             }
           }}
         >
@@ -71,7 +94,7 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 80px;
   margin: 30px;
-  background-color: lightgray;
+  border: 1px solid gray;
 `;
 
 const CheckBox = styled.input`
@@ -106,9 +129,9 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   margin: 4px;
-  width: 50px;
+  width: fit-content;
   height: 50px;
-  border: 0;
+  border: 1px solid gray;
   border-radius: 4px;
   background-color: white;
   cursor: pointer;
