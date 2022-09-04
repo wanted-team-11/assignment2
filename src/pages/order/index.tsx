@@ -1,25 +1,32 @@
 import { useMemo, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getData } from "./api";
-import { Product } from "./types";
+import { fetchProductDetail } from "../../api/order.api";
+import { Product } from "../../types/orderTypes";
 
-import WhiteContainer from "./components/OrderWhiteContainer";
-import ProductContainer from "./components/OrderProductContainer";
-import DeliveryPriceContainer from "./components/OrderDeliveryPriceContainer";
-import OrderDeliveryInfo from "./components/OrderDeliveryInfo";
-import OrderOrdererInfo from "./components/OrderOrdererInfo";
-import OrderAgreeCheckbox from "./components/OrderAgreeCheckbox";
+import WhiteContainer from "../../components/OrderWhiteContainer";
+import OrderProductContainer from "../../components/OrderProductContainer";
+import OrderDeliveryInfo from "../../components/OrderDeliveryInfo";
+import OrderOrdererInfo from "../../components/OrderOrdererInfo";
+import OrderAgreeCheckboxes from "../../components/OrderAgreeCheckboxes";
 
 import { useRecoilValue } from "recoil";
-import { selectedOptions } from "./store/order.store";
+import {
+  selectedOptions,
+  formValiditySelector,
+  orderInfo,
+} from "../../store/order.store";
 
-type Props = Pick<
+type ItemInfoAttr = Pick<
   Product,
   "imageUrls" | "name" | "deliveryFee" | "freeShippingCondition"
 >;
 
 const OrderPage = () => {
   const items = useRecoilValue(selectedOptions);
+  const [isEveryFieldValid, msg] = useRecoilValue(formValiditySelector);
+  const orderInformation = useRecoilValue(orderInfo);
+  const navigate = useNavigate();
 
   const sum = items.reduce((totalPrice, item) => {
     totalPrice += item.selectedOption.price;
@@ -28,7 +35,10 @@ const OrderPage = () => {
 
   const sumText = Intl.NumberFormat().format(sum);
 
-  const [itemInfo, setItemInfo] = useState<Props | null>(null);
+  /**
+   * 상품 상세정보
+   */
+  const [itemInfo, setItemInfo] = useState<ItemInfoAttr | null>(null);
 
   /**
    * 무료배송 요건 충족 변수
@@ -37,6 +47,18 @@ const OrderPage = () => {
     return itemInfo ? itemInfo.freeShippingCondition < sum : false;
   }, [itemInfo, sum]);
 
+  useEffect(() => {
+    (async () => {
+      const { imageUrls, name, deliveryFee, freeShippingCondition } =
+        await fetchProductDetail(items[0].productId);
+
+      setItemInfo({ imageUrls, name, deliveryFee, freeShippingCondition });
+    })();
+  }, []);
+
+  /**
+   * 결제 전 동의 체크항목들
+   */
   const [agrees, setAgrees] = useState<{
     all: boolean;
     privacy: boolean;
@@ -47,8 +69,9 @@ const OrderPage = () => {
     purchase: false,
   });
 
-  // 동의
-  const handleInputCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const isAllAgree = agrees.all && agrees.privacy && agrees.purchase;
+
+  const handleAgreeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, name } = e.currentTarget;
     if (name === "all") {
       setAgrees({
@@ -64,6 +87,9 @@ const OrderPage = () => {
     }
   };
 
+  /**
+   * "전체 동의" 관련 체크박스 동기화
+   */
   useEffect(() => {
     const { privacy, purchase } = agrees;
     const newAll = privacy && purchase;
@@ -73,13 +99,49 @@ const OrderPage = () => {
     }));
   }, [agrees.privacy, agrees.purchase]);
 
-  useEffect(() => {
-    (async () => {
-      const { imageUrls, name, deliveryFee, freeShippingCondition } =
-        await getData(items[0].productId);
-      setItemInfo({ imageUrls, name, deliveryFee, freeShippingCondition });
-    })();
-  }, []);
+  /**
+   * 결제 방식 라디오 항목
+   */
+  const [paymentMethod, setPaymentMethod] = useState("credit-card");
+
+  const handlePaymentRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    setPaymentMethod(value);
+  };
+
+  /**
+   * 선택된 상품들을 OrderProductsContainer 컴포넌트에 전달하기 위한 변수
+   */
+  const productContainerProps = items.map(
+    ({ selectedOption: { name, price }, count }) => {
+      return {
+        name: itemInfo?.name,
+        optionName: name,
+        price,
+        count,
+        thumbnailUrl: itemInfo?.imageUrls[0],
+        freeShippingCondition: itemInfo?.freeShippingCondition,
+      };
+    }
+  );
+
+  const onPurchase = () => {
+    if (!isEveryFieldValid) {
+      alert(msg);
+      return;
+    }
+    if (!isAllAgree) {
+      alert("결제 전 동의해주세요");
+      return;
+    }
+
+    // perform order
+    console.log(orderInformation);
+    setTimeout(() => {
+      alert("주문이 완료되었습니다.");
+      navigate("/");
+    }, 500);
+  };
 
   return (
     <S.Container>
@@ -87,12 +149,7 @@ const OrderPage = () => {
       <S.Wrapper>
         <S.BigBoxes>
           <WhiteContainer title="주문 상품 정보">
-            <ProductContainer
-              selectedProducts={items}
-              thumbnail={itemInfo?.imageUrls[0]}
-              prdName={itemInfo?.name}
-            />
-            <DeliveryPriceContainer isFreeShipping={isFreeShipping} sum={sum} />
+            <OrderProductContainer products={productContainerProps} />
           </WhiteContainer>
 
           <S.Form>
@@ -104,6 +161,7 @@ const OrderPage = () => {
             </WhiteContainer>
           </S.Form>
         </S.BigBoxes>
+
         <S.SmallBoxes>
           <WhiteContainer title="주문 요약" small>
             <S.ItemWrapper>
@@ -131,39 +189,34 @@ const OrderPage = () => {
                   type="radio"
                   id={"creditCard"}
                   name={"paymentMethod"}
+                  checked={paymentMethod === "credit-card"}
+                  value="credit-card"
+                  onChange={handlePaymentRadio}
                 />
                 <label htmlFor="creditCard">신용카드</label>
               </div>
               <div>
-                <S.Input type="radio" id={"noAccount"} name={"paymentMethod"} />
+                <S.Input
+                  type="radio"
+                  id={"noAccount"}
+                  name={"paymentMethod"}
+                  checked={paymentMethod === "no-bank"}
+                  value="no-bank"
+                  onChange={handlePaymentRadio}
+                />
                 <label htmlFor="noAccount">무통장입금</label>
               </div>
             </S.ItemWrapper>
           </WhiteContainer>
           <WhiteContainer title="" small>
-            <OrderAgreeCheckbox
-              name="all"
-              checked={agrees.all}
-              onChange={handleInputCheckbox}
-            >
-              전체 동의
-            </OrderAgreeCheckbox>
-            <OrderAgreeCheckbox
-              name="privacy"
-              checked={agrees.privacy}
-              onChange={handleInputCheckbox}
-            >
-              개인정보 수집 및 이용 동의
-              <a href="#">약관보기</a>
-            </OrderAgreeCheckbox>
-            <OrderAgreeCheckbox
-              name="purchase"
-              checked={agrees.purchase}
-              onChange={handleInputCheckbox}
-            >
-              구매조건 확인 및 결제진행에 동의
-            </OrderAgreeCheckbox>
+            <OrderAgreeCheckboxes
+              all={agrees.all}
+              privacy={agrees.privacy}
+              purchase={agrees.purchase}
+              handleInputCheckbox={handleAgreeCheckbox}
+            />
           </WhiteContainer>
+          <S.PurchaseButton onClick={onPurchase}>결제하기</S.PurchaseButton>
         </S.SmallBoxes>
       </S.Wrapper>
     </S.Container>
@@ -213,9 +266,13 @@ S.BigBoxes = styled.div`
   margin-right: 16px;
 `;
 S.SmallBoxes = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   position: sticky;
   top: 110px;
+  & > *:nth-child(3) {
+    margin-bottom: 0;
+  }
 `;
 
 S.ContentsWrapper = styled.div``;
@@ -223,3 +280,14 @@ S.ContentsWrapper = styled.div``;
 S.Form = styled.form``;
 
 S.Input = styled.input``;
+
+S.PurchaseButton = styled.button`
+  background-color: #4c9c2e;
+  color: white;
+  text-align: center;
+  display: block;
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  cursor: pointer;
+`;
