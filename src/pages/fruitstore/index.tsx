@@ -1,13 +1,12 @@
-import React from "react";
-import InfoArea from "./InfoArea";
-import Products from "./Products";
+import InfoArea from "./components/InfoArea";
+import Products from "./components/Products";
 
 const FruitStorePage = () => {
   return (
-    <div>
+    <>
       <InfoArea />
       <Products />
-    </div>
+    </>
   );
 };
 
