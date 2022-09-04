@@ -19,6 +19,7 @@ const GNB = () => {
           <S.NavLink to="/fruitstore">FRUIT STORE</S.NavLink>
           <S.NavLink to="">FRUIT PLAY</S.NavLink>
           <S.NavLink to="">ABOUT US</S.NavLink>
+          <S.NavLink to="admin/product-upload">ADMIN</S.NavLink>
         </S.LinkContainer>
         <NavLink to="order-list">주문 확인</NavLink>
       </S.Container>
