@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { ordererInfoState } from "../store/order.store";
-import * as S from "./styles/OrderOrdererInfo.styled";
+import * as S from "../components/styles/OrderOrdererInfo.styled";
 import OrderValidationInput from "./OrderValidationInput";
 
 const OrderOrdererInfo = () => {

@@ -1,4 +1,4 @@
-import * as S from "./styles/OrderValidationInput.styled";
+import * as S from "../components/styles/OrderValidationInput.styled";
 import { useRef } from "react";
 
 const OrderValidationInput = ({

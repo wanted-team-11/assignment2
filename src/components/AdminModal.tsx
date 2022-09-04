@@ -1,19 +1,20 @@
 import { ReactNode, Dispatch, useRef } from "react";
 import styled from "styled-components";
-import useOnClickOutside from "../hooks/useOnClickOutside";
+// import useAdminOnClickOutside from "../pages/admin/product-upload/hooks/useAdminOnClickOutside";
+import useAdminOnClickOutside from "../hooks/useAdminOnClickOutside";
 
 interface ModalProps {
   setModalState: Dispatch<boolean>;
   children: ReactNode;
 }
 
-const Modal = ({ setModalState, children }: ModalProps) => {
+const AdminModal = ({ setModalState, children }: ModalProps) => {
   const ModalRef = useRef<HTMLDivElement>(null);
   const onClickCloseModal = () => {
     setModalState(false);
   };
 
-  useOnClickOutside(ModalRef, () => setModalState(false));
+  useAdminOnClickOutside(ModalRef, () => setModalState(false));
 
   return (
     <ModalBackground>
@@ -25,7 +26,7 @@ const Modal = ({ setModalState, children }: ModalProps) => {
   );
 };
 
-export default Modal;
+export default AdminModal;
 
 const ModalBackground = styled.div`
   position: fixed;

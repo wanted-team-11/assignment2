@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
-import ThumbNail from "./components/ThumbNail";
-import Modal from "./components/Modal";
-import useInput from "./hooks/useInput";
-import OptionItem from "./components/OptionItem";
+import AdminThumbNail from "../../../components/AdminThumbNail";
+import AdminModal from "../../../components/AdminModal";
+import useAdminInput from "../../../hooks/useAdminInput";
+import AdminOptionItem from "../../../components/AdminOptionItem";
 
 interface Option {
   stockCount: number;
@@ -12,19 +12,19 @@ interface Option {
 }
 
 const AdminUploadPage = () => {
-  const dcPrice = useInput(0);
-  const originPrice = useInput(10000);
-  const deliveryFee = useInput(0);
-  const freeShippingCondition = useInput(0);
+  const dcPrice = useAdminInput(0);
+  const originPrice = useAdminInput(10000);
+  const deliveryFee = useAdminInput(0);
+  const freeShippingCondition = useAdminInput(0);
 
-  const imgUrl = useInput("");
-  const location = useInput("");
-  const description = useInput("");
-  const productName = useInput("");
+  const imgUrl = useAdminInput("");
+  const location = useAdminInput("");
+  const description = useAdminInput("");
+  const productName = useAdminInput("");
 
-  const stockCount = useInput(0);
-  const optionName = useInput("");
-  const optionPrice = useInput(0);
+  const stockCount = useAdminInput(0);
+  const optionName = useAdminInput("");
+  const optionPrice = useAdminInput(0);
 
   const [visible, setVisible] = useState<boolean>(true);
   const [modalState, setModalState] = useState<boolean>(false);
@@ -139,7 +139,7 @@ const AdminUploadPage = () => {
           <ul>
             {imgUrlList.length ? (
               imgUrlList.map((item, index) => (
-                <ThumbNail
+                <AdminThumbNail
                   key={`imgUrl-${index}`}
                   item={item}
                   onClickRemoveImg={onClickRemoveImg}
@@ -177,7 +177,7 @@ const AdminUploadPage = () => {
               </thead>
               <tbody>
                 {optionList.map((option, index) => (
-                  <OptionItem
+                  <AdminOptionItem
                     key={`option-${index}`}
                     option={option}
                     onClickRemoveOption={onClickRemoveOption}
@@ -191,7 +191,7 @@ const AdminUploadPage = () => {
         </StaticContainer>
       </section>
       {modalState && (
-        <Modal setModalState={setModalState}>
+        <AdminModal setModalState={setModalState}>
           <h3>옵션추가</h3>
           <label>옵션이름</label>
           <input
@@ -219,7 +219,7 @@ const AdminUploadPage = () => {
             placeholder="내용을 입력해 주세요"
           />
           <SubmitButton onClick={onClickAddOption}>추가</SubmitButton>
-        </Modal>
+        </AdminModal>
       )}
     </Container>
   );

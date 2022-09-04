@@ -1,21 +1,21 @@
 import { useMemo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { fetchProductDetail } from "./api";
-import { Product } from "./types";
+import { fetchProductDetail } from "../../api/order.api";
+import { Product } from "../../types/orderTypes";
 
-import WhiteContainer from "./components/OrderWhiteContainer";
-import OrderProductContainer from "./components/OrderProductContainer";
-import OrderDeliveryInfo from "./components/OrderDeliveryInfo";
-import OrderOrdererInfo from "./components/OrderOrdererInfo";
-import OrderAgreeCheckboxes from "./components/OrderAgreeCheckboxes";
+import WhiteContainer from "../../components/OrderWhiteContainer";
+import OrderProductContainer from "../../components/OrderProductContainer";
+import OrderDeliveryInfo from "../../components/OrderDeliveryInfo";
+import OrderOrdererInfo from "../../components/OrderOrdererInfo";
+import OrderAgreeCheckboxes from "../../components/OrderAgreeCheckboxes";
 
 import { useRecoilValue } from "recoil";
 import {
   selectedOptions,
   formValiditySelector,
   orderInfo,
-} from "./store/order.store";
+} from "../../store/order.store";
 
 type ItemInfoAttr = Pick<
   Product,

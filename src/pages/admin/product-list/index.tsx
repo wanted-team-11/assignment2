@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import ProductItem from "./ProductItem";
-import useRemoveProduct from "./hooks/useRemoveProduct";
-import useToggleProduct from "./hooks/useToggleProduct";
-import { Product } from "./types/types";
+import ProductItem from "../../../components/AdminProductItem";
+import useRemoveProduct from "../../../hooks/useRemoveProduct";
+import useToggleProduct from "../../../hooks/useToggleProduct";
+import { Product } from "../../../types/types";
 
 const AdminProductListPage = () => {
   const {

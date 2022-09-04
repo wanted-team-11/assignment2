@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import InfoArea from "./components/InfoArea";
-import Products from "./components/Products";
-import { productListAtom } from "./store/product.store";
+import InfoArea from "../../components/InfoArea";
+import Products from "../../components/Products";
+import { productListAtom } from "../../store/product.store";
 
 const FruitStorePage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -10,7 +10,7 @@ interface OptionItemProps {
   option: Option;
   onClickRemoveOption: (option: Option) => void;
 }
-const OptionItem = ({ option, onClickRemoveOption }: OptionItemProps) => {
+const AdminOptionItem = ({ option, onClickRemoveOption }: OptionItemProps) => {
   const onClickOption = () => {
     onClickRemoveOption(option);
   };
@@ -25,7 +25,7 @@ const OptionItem = ({ option, onClickRemoveOption }: OptionItemProps) => {
     </tr>
   );
 };
-export default OptionItem;
+export default AdminOptionItem;
 
 const TD = styled.td`
   border-bottom: 1px solid #444444;

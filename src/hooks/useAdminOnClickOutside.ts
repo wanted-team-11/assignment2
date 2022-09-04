@@ -2,14 +2,14 @@ import { useEffect, RefObject } from "react";
 
 type Event = MouseEvent | TouchEvent;
 
-const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
+const useAdminOnClickOutside = <T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
   handler: (event: Event) => void
 ) => {
   useEffect(() => {
     const listener = (event: Event) => {
       const el = ref?.current;
-      if (!el || el.contains((event?.target as Node) || null)) {
+      if (!el || el.contains(event?.target as Node)) {
         return;
       }
 
@@ -25,4 +25,4 @@ const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
     };
   }, [ref, handler]);
 };
-export default useOnClickOutside;
+export default useAdminOnClickOutside;

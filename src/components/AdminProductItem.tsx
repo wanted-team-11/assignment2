@@ -1,8 +1,8 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
-import { Product } from "./types/types";
+import { Product } from "../types/types";
 
-const ProductItem = ({
+const AdminProductItem = ({
   product,
   onRemove,
   toggleProduct,
@@ -138,4 +138,4 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-export default ProductItem;
+export default AdminProductItem;

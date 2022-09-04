@@ -1,4 +1,4 @@
-import Modal from "../Modal";
+import Modal from "./OrderModal";
 import DaumPostcode from "react-daum-postcode";
 import { useState } from "react";
 import { useRecoilState } from "recoil";

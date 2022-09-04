@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import * as S from "./styles/OrderWhiteContainer.styled";
+import * as S from "../components/styles/OrderWhiteContainer.styled";
 
 const OrderWhiteContainer = ({
   children,

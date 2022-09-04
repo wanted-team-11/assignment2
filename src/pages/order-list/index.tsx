@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { getConfirmedOrders } from "../../api/product.api";
 import OrderProductContainer, {
   Props as ProductContainerProps,
-} from "../order/components/OrderProductContainer";
-import OrderWhiteContainer from "../order/components/OrderWhiteContainer";
+} from "../../components/OrderProductContainer";
+import OrderWhiteContainer from "../../components/OrderWhiteContainer";
 
 type ConfirmedOrders = {
   orderId: number;

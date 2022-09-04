@@ -4,7 +4,7 @@ interface ThumbNailProps {
   item: string;
   onClickRemoveImg: (id: string) => void;
 }
-const ThumbNail = ({ item, onClickRemoveImg }: ThumbNailProps) => {
+const AdminThumbNail = ({ item, onClickRemoveImg }: ThumbNailProps) => {
   const onClickItem = () => {
     onClickRemoveImg(item);
   };
@@ -16,7 +16,7 @@ const ThumbNail = ({ item, onClickRemoveImg }: ThumbNailProps) => {
   );
 };
 
-export default ThumbNail;
+export default AdminThumbNail;
 
 const ImgContainer = styled.li`
   position: relative;
