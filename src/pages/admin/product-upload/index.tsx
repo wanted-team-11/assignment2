@@ -135,19 +135,19 @@ const AdminUploadPage = () => {
             />
             <button onClick={onClickUploadImg}>+</button>
           </span>
-          {imgUrlList.length ? (
-            <ul>
-              {imgUrlList.map((item, index) => (
+          <ul>
+            {imgUrlList.length ? (
+              imgUrlList.map((item, index) => (
                 <ThumbNail
                   key={`imgUrl-${index}`}
                   item={item}
                   onClickRemoveImg={onClickRemoveImg}
                 />
-              ))}
-            </ul>
-          ) : (
-            <p>이미지를 추가해 주세요</p>
-          )}
+              ))
+            ) : (
+              <p>이미지를 등록해 주세요</p>
+            )}
+          </ul>
 
           <label>원산지</label>
           <input
@@ -253,7 +253,18 @@ const StaticContainer = styled.div`
     justify-content: flex-start;
     flex-wrap: wrap;
     width: auto;
+    min-height: 220px;
 
+    border: 2px;
+    border-radius: 10px;
+    border-color: #b9b9b9;
+    border-style: dashed;
+    p {
+      color: #b9b9b9;
+      width: 100%;
+      line-height: 220px;
+      text-align: center;
+    }
     li {
       margin: 5px;
       list-style: none;
