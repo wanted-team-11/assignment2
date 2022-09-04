@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { NavLink as _NavLink } from "react-router-dom";
 
 export const GNBWrapper = styled.div`
+  z-index: 100;
   position: fixed;
   top: 0;
   left: 0;
@@ -10,6 +11,7 @@ export const GNBWrapper = styled.div`
   margin-bottom: 90px;
   padding: 0 30px;
   background-color: white;
+  border-bottom: 1px solid #e5e7eb;
 `;
 
 export const LogoWrapper = styled.div`

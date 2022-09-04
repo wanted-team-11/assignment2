@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import * as S from "../components/styles/OrderProductContainer.styled";
-// import { Product, Option, SelectedProduct } from "../types";
 import { Product, Option, SelectedProduct } from "../types/orderTypes";
 
 export type Props = {
