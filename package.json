@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.27.2",
     "react": "^18.2.0",
     "react-daum-postcode": "^3.1.1",
     "react-dom": "^18.2.0",
@@ -48,5 +49,18 @@
     "eslint-config-prettier": "^8.5.0",
     "husky": "^8.0.1",
     "prettier": "^2.7.1"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanted-team-11/assignment2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wanted-team-11/assignment2/issues"
+  },
+  "homepage": "https://github.com/wanted-team-11/assignment2#readme"
 }
