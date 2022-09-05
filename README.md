@@ -42,7 +42,7 @@
 
 - Fruitte의 스토어 리뉴얼 개발
 
-### 과제 요구사항 및 시현 영상
+### 과제 요구사항 및 시연 영상
 
 1. 사용자 기능
 
@@ -56,7 +56,11 @@ https://user-images.githubusercontent.com/46833758/188325919-39f92d4f-b7ca-4372-
 - 스토어 상품 상세조회(이미지, 상품 옵션, 수량, 가격 등)
 
 
-https://user-images.githubusercontent.com/46833758/188325983-71d2f046-0021-4c81-9bf0-94c6c8c19a7b.mp4
+
+
+
+https://user-images.githubusercontent.com/46833758/188344572-10ceead9-3e52-4c5b-a826-90d0b07a15b1.mp4
+
 
 
 
