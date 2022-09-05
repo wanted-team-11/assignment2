@@ -1,11 +1,7 @@
 import type { Product } from "../types/orderTypes";
 
-const API_URI = "http://localhost:3000/";
-
 export const fetchProductDetail = async (id: number) => {
-  const [products, error] = await getFetch(
-    `${API_URI}/mockup-data/products.json`
-  );
+  const [products, error] = await getFetch(`/mockup-data/products.json`);
   if (error) {
     // TODO: handle error
   }
