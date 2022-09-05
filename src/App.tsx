@@ -1,4 +1,3 @@
-import Test from "./Test";
 import GNB from "./components/GNB";
 import Footer from "./components/Footer";
 
@@ -26,7 +25,6 @@ function App() {
             <Route path="product-upload" element={<AdminUploadPage />} />
             <Route path="product-list" element={<AdminProductListPage />} />
           </Route>
-          <Route path="test" element={<Test />} />
         </Routes>
         <Footer />
       </BrowserRouter>
