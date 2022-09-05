@@ -20,6 +20,10 @@
 <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white"/>
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/>
 <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/>
+
+<img src="https://camo.githubusercontent.com/9e90e7acc2251aa177a93dc563bc36c57ab992c87937ef96d3deeebaef6cb8fc/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5265636f696c2d3637334142383f7374796c653d666f722d7468652d6261646765266c6f676f3d5265636f696c266c6f676f436f6c6f723d7768697465">
+
+
 </div>
 </br>
 
@@ -28,6 +32,8 @@
   - TypeScript : 정적 타입 지원하므로 컴파일 단계에서 오류를 포착할 수 있고, 여러가지 패러다임을 활용할 수 있어서 채택했다.(절차지향, 객체지향, 함수형)
 
   - styled-component : 컴포넌트화 시켜 다른곳에서도 사용 가능하며, 제일 많이 쓰는 css 라이브러리라 채택했다.  
+
+  - recoil :  props drilling을 피하고 페이지간 데이터 공유를 위해 상태관리 라이브러리 도입을 결정했고, 문법이 간단해 learning curve가 낮아 도입을 결정했다.
     </br>
 
 ## 😃 과제 소개
